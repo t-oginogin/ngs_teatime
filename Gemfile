@@ -46,3 +46,8 @@ group :development, :test do
   gem 'pry-rails'
   gem 'pry-byebug'
 end
+
+group :test do
+  gem 'capybara', '~> 2.3.0'
+  gem 'poltergeist', '~> 1.5.0'
+end
