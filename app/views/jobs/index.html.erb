@@ -1,22 +1,26 @@
 <h1>Listing jobs</h1>
 
-<table>
+<br/>
+
+<table class="table table-striped">
   <thead>
     <tr>
-      <th>Tool</th>
-      <th>Target File 1</th>
-      <th>Target File 2</th>
-      <th>Reference File 1</th>
-      <th>Reference File 2</th>
-      <th>Comment</th>
-      <th>Status</th>
-      <th colspan="7"></th>
+      <th><%= t('activerecord.attributes.job.id') %></th>
+      <th><%= t('activerecord.attributes.job.tool') %></th>
+      <th><%= t('activerecord.attributes.job.target_file_1') %></th>
+      <th><%= t('activerecord.attributes.job.target_file_2') %></th>
+      <th><%= t('activerecord.attributes.job.reference_file_1') %></th>
+      <th><%= t('activerecord.attributes.job.reference_file_2') %></th>
+      <th><%= t('activerecord.attributes.job.comment') %></th>
+      <th><%= t('activerecord.attributes.job.status') %></th>
+      <th colspan="8"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @jobs.each do |job| %>
       <tr>
+        <td><%= job.id %></td>
         <td><%= job.tool %></td>
         <td><%= job.target_file_1 %></td>
         <td><%= job.target_file_2 %></td>
@@ -24,9 +28,9 @@
         <td><%= job.reference_file_2 %></td>
         <td><%= job.comment %></td>
         <td><%= job.status %></td>
-        <td><%= link_to 'Show', job %></td>
-        <td><%= link_to 'Edit', edit_job_path(job) %></td>
-        <td><%= link_to 'Delete', job, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to t('messages.show'), job %></td>
+        <td><%= link_to t('messages.edit'), edit_job_path(job) %></td>
+        <td><%= link_to t('messages.delete'), job, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
@@ -34,4 +38,8 @@
 
 <br>
 
-<%= link_to 'New Job', new_job_path %>
+<div class="row">
+  <div class="col-md-1">
+    <%= link_to t('messages.new_job'), new_job_path, class: "btn btn-primary" %>
+  </div>
+</div>

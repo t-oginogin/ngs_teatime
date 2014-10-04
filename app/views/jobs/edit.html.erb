@@ -1,6 +1,12 @@
-<h1>Editing job</h1>
+<h1>Editing Job</h1>
 
 <%= render 'form' %>
 
-<%= link_to 'Show', @job %> |
-<%= link_to 'Back', jobs_path %>
+<div class="row">
+  <div class="col-md-1">
+    <%= link_to 'Show', @job, class: "btn btn-default" %>
+  </div>
+  <div class="col-md-1">
+    <%= link_to 'Back', jobs_path, class: "btn btn-default" %>
+  </div>
+</div>

@@ -4,6 +4,7 @@ ja:
       job: ジョブ
     attributes:
       job:
+        id: ジョブID
         tool: ツール
         target_file_1: 対象ファイル1
         target_file_2: 対象ファイル2
@@ -11,3 +12,12 @@ ja:
         reference_file_2: 参照ファイル2
         comment: コメント
         status: 実行状態 
+  messages:
+    show: '表示'
+    edit: '編集'
+    delete: '削除'
+    back: '戻る'
+    new_job: '新規ジョブ'
+    created_job: '新しくジョブを作成しました。'
+    updated_job: 'ジョブを更新しました。'
+    deleted_job: 'ジョブを削除しました。'

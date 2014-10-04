@@ -1,33 +1,87 @@
-<p id="notice"><%= notice %></p>
+<H1>Job Detail</H1>
 
-<p>
-  <%= t('activerecord.attributes.job.tool') %>
-  <%= @job.tool %>
-</p>
-<p>
-  <%= t('activerecord.attributes.job.target_file_1') %>
-  <%= @job.target_file_1 %>
-</p>
-<p>
-  <%= t('activerecord.attributes.job.target_file_2') %>
-  <%= @job.target_file_2 %>
-</p>
-<p>
-  <%= t('activerecord.attributes.job.reference_file_1') %>
-  <%= @job.reference_file_1 %>
-</p>
-<p>
-  <%= t('activerecord.attributes.job.reference_file_2') %>
-  <%= @job.reference_file_2 %>
-</p>
-<p>
-  <%= t('activerecord.attributes.job.comment') %>
-  <%= @job.comment %>
-</p>
-<p>
-  <%= t('activerecord.attributes.job.status') %>
-  <%= @job.status %>
-</p>
+<div class="row">
+  <div class="col-md-2">
+    <%= t('activerecord.attributes.job.tool') %>
+  </div>
+  <div class="col-md-2">
+    <%= @job.tool %>
+  </div>
+</div>
 
-<%= link_to 'Edit', edit_job_path(@job) %> |
-<%= link_to 'Back', jobs_path %>
+<br/>
+
+<div class="row">
+  <div class="col-md-2">
+    <%= t('activerecord.attributes.job.target_file_1') %>
+  </div>
+  <div class="col-md-4">
+    <%= @job.target_file_1 %>
+  </div>
+</div>
+
+<br/>
+
+<div class="row">
+  <div class="col-md-2">
+    <%= t('activerecord.attributes.job.target_file_2') %>
+  </div>
+  <div class="col-md-4">
+    <%= @job.target_file_2 %>
+  </div>
+</div>
+
+<br/>
+
+<div class="row">
+  <div class="col-md-2">
+    <%= t('activerecord.attributes.job.reference_file_1') %>
+  </div>
+  <div class="col-md-4">
+    <%= @job.reference_file_1 %>
+  </div>
+</div>
+
+<br/>
+
+<div class="row">
+  <div class="col-md-2">
+    <%= t('activerecord.attributes.job.reference_file_2') %>
+  </div>
+  <div class="col-md-4">
+    <%= @job.reference_file_2 %>
+  </div>
+</div>
+
+<br/>
+
+<div class="row">
+  <div class="col-md-2">
+    <%= t('activerecord.attributes.job.comment') %>
+  </div>
+  <div class="col-md-4">
+    <%= @job.comment %>
+  </div>
+</div>
+
+<br/>
+
+<div class="row">
+  <div class="col-md-2">
+    <%= t('activerecord.attributes.job.status') %>
+  </div>
+  <div class="col-md-2">
+    <%= @job.status %>
+  </div>
+</div>
+
+<br/>
+
+<div class="row">
+  <div class="col-md-1">
+    <%= link_to t('messages.edit'), edit_job_path(@job), class: "btn btn-default" %>
+  </div>
+  <div class="col-md-1">
+    <%= link_to t('messages.back'), jobs_path, class: "btn btn-default" %>
+  </div>
+</div>
