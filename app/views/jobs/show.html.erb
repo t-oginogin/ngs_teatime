@@ -82,7 +82,7 @@
     <%= t('activerecord.attributes.job.status') %>
   </div>
   <div class="col-md-2">
-    <%= @job.status %>
+    <%= Job::STATUS[@job.status] %>
   </div>
 </div>
 

@@ -27,7 +27,7 @@
         <td><%= job.reference_file_1.file.try(:filename) if job.reference_file_1 %></td>
         <td><%= job.reference_file_2.file.try(:filename) if job.reference_file_2 %></td>
         <td><%= job.comment %></td>
-        <td><%= job.status %></td>
+        <td><%= Job::STATUS[job.status] %></td>
         <td><%= link_to t('messages.show'), job %></td>
         <td><%= link_to t('messages.edit'), edit_job_path(job) %></td>
         <td><%= link_to t('messages.delete'), job, method: :delete, data: { confirm: 'Are you sure?' } %></td>

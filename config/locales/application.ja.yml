@@ -22,3 +22,10 @@ ja:
     updated_job: 'ジョブを更新しました。'
     deleted_job: 'ジョブを削除しました。'
     delete_file: 'ファイルを削除'
+    status:
+      created: '作成'
+      scheduled: '実行待ち'
+      doing: '実行中'
+      canceled: 'キャンセル'
+      error: 'エラー発生'
+      done: '完了'

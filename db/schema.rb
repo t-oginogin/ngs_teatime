@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141004014241) do
+ActiveRecord::Schema.define(version: 20141004104044) do
 
   create_table "jobs", force: true do |t|
     t.string   "tool"
@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20141004014241) do
     t.string   "reference_file_1"
     t.string   "reference_file_2"
     t.string   "comment"
-    t.string   "status"
+    t.string   "status",           default: "created"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
