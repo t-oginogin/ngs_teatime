@@ -26,7 +26,7 @@
 
   <div class="row form-group">
     <div class="col-md-2">
-      <%= f.label :tool %><br>
+      <%= f.label :tool %>*<br>
     </div>
     <div class="col-md-2">
       <%= f.select :tool, tool_labels, {}, class: 'form-control' %>
@@ -35,7 +35,7 @@
 
   <div class="row form-group">
     <div class="col-md-2">
-      <%= f.label :target_file_1 %><br>
+      <%= f.label :target_file_1 %>*<br>
     </div>
     <div class="col-md-4">
       <%= f.file_field :target_file_1, class: 'filestyle form-control' %>
@@ -67,7 +67,7 @@
 
   <div class="row form-group">
     <div class="col-md-2">
-      <%= f.label :reference_file_1 %><br>
+      <%= f.label :reference_file_1 %>*<br>
     </div>
     <div class="col-md-4">
       <%= f.file_field :reference_file_1, class: 'filestyle form-control' %>
