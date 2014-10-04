@@ -69,6 +69,10 @@ class JobsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def job_params
-      params.require(:job).permit(:tool, :status, :comment, :target_file_1, :target_file_2, :reference_file_1, :reference_file_2)
+      params.require(:job).permit(:tool, :status, :comment,
+                                  :target_file_1, :target_file_1_cache, :remove_target_file_1,
+                                  :target_file_2, :target_file_2_cache, :remove_target_file_2,
+                                  :reference_file_1, :reference_file_1_cache, :remove_reference_file_1,
+                                  :reference_file_2, :reference_file_2_cache, :remove_reference_file_2)
     end
 end

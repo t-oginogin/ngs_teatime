@@ -21,3 +21,4 @@ ja:
     created_job: '新しくジョブを作成しました。'
     updated_job: 'ジョブを更新しました。'
     deleted_job: 'ジョブを削除しました。'
+    delete_file: 'ファイルを削除'

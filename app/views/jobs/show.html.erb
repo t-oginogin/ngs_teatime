@@ -16,7 +16,7 @@
     <%= t('activerecord.attributes.job.target_file_1') %>
   </div>
   <div class="col-md-4">
-    <%= @job.target_file_1 %>
+    <%= @job.target_file_1.file.try(:filename) if @job.target_file_1 %>
   </div>
 </div>
 
@@ -27,7 +27,7 @@
     <%= t('activerecord.attributes.job.target_file_2') %>
   </div>
   <div class="col-md-4">
-    <%= @job.target_file_2 %>
+    <%= @job.target_file_2.file.try(:filename) if @job.target_file_2 %>
   </div>
 </div>
 
@@ -38,7 +38,7 @@
     <%= t('activerecord.attributes.job.reference_file_1') %>
   </div>
   <div class="col-md-4">
-    <%= @job.reference_file_1 %>
+    <%= @job.reference_file_1.file.try(:filename) if @job.reference_file_1 %>
   </div>
 </div>
 
@@ -49,7 +49,7 @@
     <%= t('activerecord.attributes.job.reference_file_2') %>
   </div>
   <div class="col-md-4">
-    <%= @job.reference_file_2 %>
+    <%= @job.reference_file_2.file.try(:filename) if @job.reference_file_2 %>
   </div>
 </div>
 
