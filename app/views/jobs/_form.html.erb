@@ -29,7 +29,7 @@
       <%= f.label :tool %><br>
     </div>
     <div class="col-md-2">
-      <%= f.text_field :tool, class: 'form-control' %>
+      <%= f.select :tool, tool_labels, {}, class: 'form-control' %>
     </div>
   </div>
 
