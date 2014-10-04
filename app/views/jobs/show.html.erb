@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <%= t('activerecord.attributes.job.tool') %>
+  <%= @job.tool %>
+</p>
+<p>
+  <%= t('activerecord.attributes.job.target_file_1') %>
+  <%= @job.target_file_1 %>
+</p>
+<p>
+  <%= t('activerecord.attributes.job.target_file_2') %>
+  <%= @job.target_file_2 %>
+</p>
+<p>
+  <%= t('activerecord.attributes.job.reference_file_1') %>
+  <%= @job.reference_file_1 %>
+</p>
+<p>
+  <%= t('activerecord.attributes.job.reference_file_2') %>
+  <%= @job.reference_file_2 %>
+</p>
+<p>
+  <%= t('activerecord.attributes.job.comment') %>
+  <%= @job.comment %>
+</p>
+<p>
+  <%= t('activerecord.attributes.job.status') %>
+  <%= @job.status %>
+</p>
+
+<%= link_to 'Edit', edit_job_path(@job) %> |
+<%= link_to 'Back', jobs_path %>

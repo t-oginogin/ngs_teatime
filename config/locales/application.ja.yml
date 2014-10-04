@@ -1,0 +1,13 @@
+ja:
+  activerecord:
+    models:
+      job: ジョブ
+    attributes:
+      job:
+        tool: ツール
+        target_file_1: 対象ファイル1
+        target_file_2: 対象ファイル2
+        reference_file_1: 参照ファイル1
+        reference_file_2: 参照ファイル2
+        comment: コメント
+        status: 実行状態 
