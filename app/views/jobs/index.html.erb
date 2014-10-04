@@ -13,7 +13,7 @@
       <th><%= t('activerecord.attributes.job.reference_file_2') %></th>
       <th><%= t('activerecord.attributes.job.comment') %></th>
       <th><%= t('activerecord.attributes.job.status') %></th>
-      <th colspan="8"></th>
+      <th colspan="4"><%= t('messages.action') %></th>
     </tr>
   </thead>
 
@@ -28,9 +28,13 @@
         <td><%= job.reference_file_2.file.try(:filename) if job.reference_file_2 %></td>
         <td><%= job.comment %></td>
         <td><%= Job::STATUS[job.status] %></td>
+        <td>
+          <%= link_to t('messages.schedule'), schedule_job_path(job) if job.status == 'created' || job.status == 'canceled' %>
+          <%= link_to t('messages.cancel'), cancel_job_path(job) if job.status == 'scheduled' || job.status == 'doing'%>
+        </td>
         <td><%= link_to t('messages.show'), job %></td>
-        <td><%= link_to t('messages.edit'), edit_job_path(job) %></td>
-        <td><%= link_to t('messages.delete'), job, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to t('messages.edit'), edit_job_path(job) unless job.status == 'scheduled' || job.status == 'doing' %></td>
+        <td><%= link_to t('messages.delete'), job, method: :delete, data: { confirm: 'Are you sure?' } unless job.status == 'scheduled' || job.status == 'doing' %></td>
       </tr>
     <% end %>
   </tbody>

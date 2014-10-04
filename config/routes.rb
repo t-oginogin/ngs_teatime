@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'jobs/:id/schedule' => 'jobs#schedule', as: :schedule_job
+  get 'jobs/:id/cancel' => 'jobs#cancel', as: :cancel_job
+
   resources :jobs
 
   # The priority is based upon order of creation: first created -> highest priority.

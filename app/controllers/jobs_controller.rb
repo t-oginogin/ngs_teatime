@@ -21,6 +21,30 @@ class JobsController < ApplicationController
   def edit
   end
 
+  # GET /jobs/1/schedule
+  def schedule
+    # ToDo: schedule job
+    job = Job.find params[:id]
+    job.status = 'scheduled'
+    job.save
+
+    respond_to do |format|
+      format.html { redirect_to jobs_url, notice: t('messages.scheduled_job') }
+    end
+  end
+
+  # GET /jobs/1/cancel
+  def cancel
+    # ToDo: cancel job
+    job = Job.find params[:id]
+    job.status = 'canceled'
+    job.save
+
+    respond_to do |format|
+      format.html { redirect_to jobs_url, notice: t('messages.canceled_job') }
+    end
+  end
+
   # POST /jobs
   # POST /jobs.json
   def create
