@@ -13,6 +13,7 @@
     </div>
   <% end %>
 
+  <% unless controller.action_name == 'new' %>
   <div class="row form-group">
     <div class="col-md-2">
       <%= f.label :id %><br>
@@ -21,6 +22,7 @@
       <%= @job.id %>
     </div>
   </div>
+  <% end %>
 
   <div class="row form-group">
     <div class="col-md-2">
@@ -104,6 +106,7 @@
     </div>
   </div>
 
+  <% unless controller.action_name == 'new' %>
   <div class="row form-group">
     <div class="col-md-2">
       <%= f.label :status %><br>
@@ -112,6 +115,7 @@
       <%= @job.status %>
     </div>
   </div>
+  <% end %>
 
   <div class="row form-group">
     <div class="col-md-2">
