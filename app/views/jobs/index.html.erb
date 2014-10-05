@@ -29,12 +29,12 @@
         <td><%= job.comment %></td>
         <td><%= Job::STATUS[job.status] %></td>
         <td>
-          <%= link_to t('messages.schedule'), schedule_job_path(job) if job.status == 'created' || job.status == 'canceled' %>
-          <%= link_to t('messages.cancel'), cancel_job_path(job) if job.status == 'scheduled' || job.status == 'doing'%>
+          <%= link_to t('messages.schedule'), schedule_job_path(job) if schedulable job %>
+          <%= link_to t('messages.cancel'), cancel_job_path(job) if cancelable job %>
         </td>
         <td><%= link_to t('messages.show'), job %></td>
-        <td><%= link_to t('messages.edit'), edit_job_path(job) unless job.status == 'scheduled' || job.status == 'doing' %></td>
-        <td><%= link_to t('messages.delete'), job, method: :delete, data: { confirm: 'Are you sure?' } unless job.status == 'scheduled' || job.status == 'doing' %></td>
+        <td><%= link_to t('messages.edit'), edit_job_path(job) if editable job %></td>
+        <td><%= link_to t('messages.delete'), job, method: :delete, data: { confirm: 'Are you sure?' } if deletable job %></td>
       </tr>
     <% end %>
   </tbody>
