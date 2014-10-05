@@ -27,6 +27,8 @@ ja:
     delete_file: 'ファイルを削除'
     scheduled_job: 'ジョブを予約しました。'
     schedule_job_failed: 'ジョブの予約に失敗しました。'
+    doing_job: 'ジョブの実行を開始しました。'
+    doing_job_failed: 'ジョブの実行に失敗しました。'
     canceled_job: 'ジョブをキャンセルしました。'
     cancel_job_failed: 'ジョブのキャンセルに失敗しました。'
     done_job: 'ジョブが完了しました。'

@@ -31,6 +31,19 @@ class Job < ActiveRecord::Base
         false
     end
 
+    def be_doing( job_id )
+      Job.transaction do
+        job = Job.find job_id
+        job.status = 'doing'
+        job.save!
+      end
+        true
+      rescue => e
+        logger.error(I18n.t('messages.doing_job_failed'))
+        logger.error(e.message)
+        false
+    end
+
     def cancel( job_id )
       Job.transaction do
         JobQueue.find_by(job_id: job_id).destroy!
