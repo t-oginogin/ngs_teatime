@@ -86,4 +86,11 @@ class Job < ActiveRecord::Base
         false
     end
   end
+
+  def update_with_status( params )
+    if self.update params
+      self.status = 'created'
+      self.save!
+    end
+  end
 end
