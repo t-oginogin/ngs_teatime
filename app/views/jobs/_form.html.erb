@@ -112,7 +112,7 @@
       <%= f.label :status %><br>
     </div>
     <div class="col-md-2">
-      <%= @job.status %>
+      <%=  Job::STATUS[@job.status] %>
     </div>
   </div>
   <% end %>
