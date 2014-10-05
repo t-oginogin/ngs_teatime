@@ -26,7 +26,13 @@ ja:
     deleted_job: 'ジョブを削除しました。'
     delete_file: 'ファイルを削除'
     scheduled_job: 'ジョブを予約しました。'
+    schedule_job_failed: 'ジョブの予約に失敗しました。'
     canceled_job: 'ジョブをキャンセルしました。'
+    cancel_job_failed: 'ジョブのキャンセルに失敗しました。'
+    done_job: 'ジョブが完了しました。'
+    done_job_failed: 'ジョブの完了登録に失敗しました。'
+    error_occurred_job: 'ジョブエラーが発生しました。'
+    error_occurred_job_faild: 'ジョブエラー登録でエラーが発生しました。'
     status:
       created: '作成'
       scheduled: '実行待ち'

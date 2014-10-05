@@ -23,25 +23,23 @@ class JobsController < ApplicationController
 
   # GET /jobs/1/schedule
   def schedule
-    # ToDo: schedule job
-    job = Job.find params[:id]
-    job.status = 'scheduled'
-    job.save
-
     respond_to do |format|
-      format.html { redirect_to jobs_url, notice: t('messages.scheduled_job') }
+      if Job.schedule params[:id]
+        format.html { redirect_to jobs_url, notice: t('messages.scheduled_job') }
+      else
+        format.html { redirect_to jobs_url, alert: t('messages.schedule_job_failed') }
+      end
     end
   end
 
   # GET /jobs/1/cancel
   def cancel
-    # ToDo: cancel job
-    job = Job.find params[:id]
-    job.status = 'canceled'
-    job.save
-
     respond_to do |format|
-      format.html { redirect_to jobs_url, notice: t('messages.canceled_job') }
+      if Job.cancel params[:id]
+        format.html { redirect_to jobs_url, notice: t('messages.canceled_job') }
+      else
+        format.html { redirect_to jobs_url, alert: t('messages.cancel_job_failed') }
+      end
     end
   end
 
