@@ -4,6 +4,8 @@ class Job < ActiveRecord::Base
   mount_uploader :reference_file_1, FastqUploader
   mount_uploader :reference_file_2, FastqUploader
 
+  has_one :job_queue
+
   validates_presence_of :tool
   validates_presence_of :target_file_1
   validates_presence_of :reference_file_1

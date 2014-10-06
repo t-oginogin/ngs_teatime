@@ -1,4 +1,4 @@
 class JobQueue < ActiveRecord::Base
-  has_one :job
+  belongs_to :job
   validates_presence_of :job_id
 end
