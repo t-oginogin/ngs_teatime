@@ -324,4 +324,35 @@ RSpec.describe Job, :type => :model do
       end
     end
   end
+
+  describe '#update_with_status' do
+    before do
+      @job = Job.new
+      @job.tool = 'bwa'
+      @job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      @job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      @job.status = 'canceled'
+      @job.save!
+    end
+
+    context 'with valid params' do
+      it "change status to be 'created'" do
+        params = {tool: @job.tool, target_file_1: @job.target_file_1, reference_file_1: @job.reference_file_1}
+
+        @job.update_with_status params
+
+        expect(@job.status).to eq 'created'
+      end
+    end
+
+    context 'with invalid params' do
+      it 'do not change status' do
+        params = {tool: nil, target_file_1: nil, reference_file_1: nil}
+
+        @job.update_with_status params
+
+        expect(@job.status).to eq 'canceled'
+      end
+    end
+  end
 end
