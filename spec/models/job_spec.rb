@@ -258,4 +258,70 @@ RSpec.describe Job, :type => :model do
       end
     end
   end
+
+  describe '#error_occurred' do
+    before do
+      job = Job.new
+      job.tool = 'bwa'
+      job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      job.save!
+      @job_id = job.id
+    end
+
+    context 'with valid data' do
+      before do
+        JobQueue.create!(job_id: @job_id+1)
+        Job.schedule @job_id
+        @isSuccess = Job.error_occurred @job_id
+        @job = Job.first
+      end
+
+      it 'return true' do
+        expect(@isSuccess).to eq true
+      end
+
+      it "change status to be 'error'" do
+        expect(@job.status).to eq 'error'
+      end
+
+      it 'delete JobQueue with job_id' do
+        expect(Job.all.count).to eq 1
+        expect(@job.job_queue).to be_nil
+      end
+    end
+
+    context 'with invalid data' do
+      before do
+        Job.schedule @job_id
+        job = Job.first
+        job.tool = nil
+        job.save!(validate: false)
+        @isSuccess = Job.error_occurred @job_id
+      end
+
+      it 'return false' do
+        expect(@isSuccess).to eq false
+      end
+
+      it 'do not delete JobQueue' do
+        expect(Job.all.count).to eq 1
+      end
+    end
+
+    context 'with not found Job' do
+      before do
+        Job.schedule @job_id
+        @isSuccess = Job.error_occurred 0
+      end
+
+      it 'return false' do
+        expect(@isSuccess).to eq false
+      end
+
+      it 'do not delete JobQueue' do
+        expect(Job.all.count).to eq 1
+      end
+    end
+  end
 end
