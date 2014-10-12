@@ -62,4 +62,68 @@ RSpec.describe Job, :type => :model do
       end
     end
   end
+
+  describe '#be_doing' do
+    before do
+      job = Job.new
+      job.tool = 'bwa'
+      job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      job.save!
+      @job_id = job.id
+    end
+
+    context 'with valid data' do
+      before do
+        Job.schedule @job_id
+        @isSuccess = Job.be_doing @job_id
+        @job = Job.first
+      end
+
+      it 'return true' do
+        expect(@isSuccess).to eq true
+      end
+
+      it "change status to be 'doing'" do
+        expect(@job.status).to eq 'doing'
+      end
+
+      it 'do not create or delete JobQueue' do
+        expect(Job.all.count).to eq 1
+      end
+    end
+
+    context 'with invalid data' do
+      before do
+        Job.schedule @job_id
+        job = Job.first
+        job.tool = nil
+        job.save!(validate: false)
+        @isSuccess = Job.be_doing @job_id
+      end
+
+      it 'return false' do
+        expect(@isSuccess).to eq false
+      end
+
+      it 'do not create or delete JobQueue' do
+        expect(Job.all.count).to eq 1
+      end
+    end
+
+    context 'with not found Job' do
+      before do
+        Job.schedule @job_id
+        @isSuccess = Job.be_doing 0
+      end
+
+      it 'return false' do
+        expect(@isSuccess).to eq false
+      end
+
+      it 'do not create or delete JobQueue' do
+        expect(Job.all.count).to eq 1
+      end
+    end
+  end
 end
