@@ -1,4 +1,65 @@
 require 'rails_helper'
 
 RSpec.describe Job, :type => :model do
+
+  describe '#schedule' do
+    before do
+      job = Job.new
+      job.tool = 'bwa'
+      job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      job.save!
+      @job_id = job.id
+    end
+
+    context 'with valid job_id' do
+      before do
+        @isSuccess = Job.schedule @job_id
+        @job = Job.first
+      end
+
+      it 'return true' do
+        expect(@isSuccess).to eq true
+      end
+
+      it "change status to be 'scheduled'" do
+        expect(@job.status).to eq 'scheduled'
+      end
+
+      it 'create JobQueue with job_id' do
+        expect(@job.job_queue.job_id).to eq @job.id
+      end
+    end
+
+    context 'with invalid data' do
+      before do
+        job = Job.first
+        job.tool = nil
+        job.save!(validate: false)
+        @isSuccess = Job.schedule @job_id
+      end
+
+      it 'return false' do
+        expect(@isSuccess).to eq false
+      end
+
+      it 'do not create JobQueue' do
+        expect(JobQueue.all.count).to eq 0
+      end
+    end
+
+    context 'with not found Job' do
+      before do
+        @isSuccess = Job.schedule 0
+      end
+
+      it 'return false' do
+        expect(@isSuccess).to eq false
+      end
+
+      it 'do not create JobQueue' do
+        expect(JobQueue.all.count).to eq 0
+      end
+    end
+  end
 end
