@@ -95,4 +95,87 @@ class Job < ActiveRecord::Base
       self.save!
     end
   end
+
+  def command
+    self.send "#{self.tool}_command" if self.tool.present?
+  end
+
+  private
+
+  def vicuna_command
+    logger.error "vicuna command is not supported now"
+    nil
+  end
+
+  def bwa_command
+    logger.error "bwa command is not supported now"
+    return nil
+=begin
+    basename_1 = File.basename(self.target_file_1.path, File.extname(self.target_file_1.path))
+    basename_2 = File.basename(self.target_file_2.path, File.extname(self.target_file_1.path))
+    sai_1_path = "tmp/job_work/#{self.id}/#{basename_1}.sai"
+    sai_2_path = "tmp/job_work/#{self.id}/#{basename_2}.sai"
+    sam_path = "tmp/job_work/#{self.id}/#{basename_1}.sam"
+    cmp_path = "tmp/job_work/#{self.id}/cmp"
+
+    command = <<-"EOS"
+    bwa index -a bwtsw #{self.reference_file_1.path}
+    bwa aln -t 2 #{self.reference_file_1.path} #{self.target_file_1.path} > #{sai_1_path}
+    bwa aln -t 2 #{self.reference_file_1.path} #{self.target_file_2.path} > #{sai_2_path}
+    bwa sampe -P #{self.reference_file_1.path} #{sai_1_path} #{sai_2_path} #{self.target_file_1.path} #{self.target_file_2.path} -r "@RG\tID:01\tSM:s6\tPL:Illumina" > #{sam_path}
+    touch #{cmp_path}
+    EOS
+    command
+=end
+  end
+
+  def bwa2_command
+    logger.error "bwa2 command is not supported now"
+    nil
+  end
+
+  def sam_tools_command
+    logger.error "sam_tools command is not supported now"
+    return nil
+=begin
+    basename_1 = File.basename(self.target_file_1.path, File.extname(self.target_file_1.path))
+    sam_path = "tmp/job_work/#{self.id}/#{basename_1}.sam"
+    bam_path = "tmp/job_work/#{self.id}/#{basename_1}.bam"
+    sorted_name = "tmp/job_work/#{self.id}/#{basename_1}_sorted"
+    sorted_bam_path = "#{sorted_name}.bam"
+    cmp_path = "tmp/job_work/#{self.id}/cmp"
+
+    command = <<-"EOS"
+    samtools view -bS #{sam_path} > #{bam_path}
+    samtools sort #{bam_path} #{sorted_name}
+    samtools index #{sorted_bam_path}
+    touch #{cmp_path}
+    EOS
+    command
+=end
+  end
+
+  def bowtie_command
+    logger.error "bowtie command is not supported now"
+    nil
+  end
+
+  def bowtie2_command
+    logger.error "bowtie2 command is not supported now"
+    return nil
+=begin
+    cmp_path = "tmp/job_work/#{self.id}/cmp"
+
+    command = <<-"EOS"
+    bowtie2 -p 2 --un-conc #{self.id}_un.fastq --al-conc #{self.id}_al.fastq -x #{File.dirname(self.reference_file_1.path)} -1 #{self.target_fastq_1.path} -2 #{self.target_fastq_2.path} > /dev/null 2> tmp/job_work/#{self.id}/bowtie2.log
+    touch #{cmp_path}
+    EOS
+    command
+=end
+  end
+
+  def done?
+    # TODO: if 'cmp' file is exist then return true
+    false
+  end
 end
