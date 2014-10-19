@@ -97,8 +97,7 @@ class Job < ActiveRecord::Base
   end
 
   def done?
-    work_path = create_work_path
-    return true if FileTest.exist?("#{work_path}/cmp")
+    return true if FileTest.exist?(cmp_path)
     false
   end
 
@@ -163,8 +162,7 @@ class Job < ActiveRecord::Base
   end
 
   def bowtie2_command
-    work_path = create_work_path
-    cmp_path = "#{work_path}/cmp"
+    create_work_dir
 
     command = <<-"EOS"
     bowtie2 -p 2 --un-conc #{self.id}_un.fastq --al-conc #{self.id}_al.fastq -x #{File.dirname(self.reference_file_1.path)} -1 #{self.target_file_1.path} -2 #{self.target_file_2.path} > /dev/null &2> tmp/job_work/#{self.id}/bowtie2.log
@@ -173,10 +171,15 @@ class Job < ActiveRecord::Base
     command
   end
 
-  def create_work_path
+  def work_path
     work_path = "tmp/job_work/#{self.id}"
-    FileUtils.mkdir_p(work_path) unless FileTest.exist?(work_path)
-    work_path
   end
 
+  def cmp_path
+    "#{work_path}/cmp"
+  end
+
+  def create_work_dir
+    FileUtils.mkdir_p(work_path) unless FileTest.exist?(work_path)
+  end
 end
