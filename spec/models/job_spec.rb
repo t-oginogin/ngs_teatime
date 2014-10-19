@@ -266,4 +266,71 @@ RSpec.describe Job, :type => :model do
       end
     end
   end
+
+  describe '#command' do
+    before do
+      @job = Job.new
+      @job.tool = 'vicuna'
+      @job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      @job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      @job.save!
+    end
+
+    context 'with vicuna' do
+      skip 'return vicuna command string' do
+        @job.tool = 'vicuna'
+        @job.save!
+        expect(@job.command).to match /vicuna/
+      end
+    end
+
+    context 'with bwa' do
+      skip 'return bwa command string' do
+        @job.tool = 'bwa'
+        @job.save!
+        expect(@job.command).to match /bwa/
+      end
+    end
+
+    context 'with bwa2' do
+      skip 'return bwa2 command string' do
+        @job.tool = 'bwa2'
+        @job.save!
+        expect(@job.command).to match /bwa2/
+      end
+    end
+
+    context 'with sam_tools' do
+      skip 'return sam_tools command string' do
+        @job.tool = 'sam_tools'
+        @job.save!
+        expect(@job.command).to match /sam_tools/
+      end
+    end
+
+    context 'with bowtie' do
+      skip 'return bowtie command string' do
+        @job.tool = 'bowtie'
+        @job.save!
+        expect(@job.command).to match /bowtie/
+      end
+    end
+
+    context 'with bowtie2' do
+      it 'return bowtie2 command string' do
+        @job.tool = 'bowtie2'
+        @job.save!
+        expect(@job.command).to match /bowtie2/
+      end
+    end
+
+    context 'with invalid tool' do
+      it 'return nil' do
+        @job.tool = ''
+        @job.save!(validate: false)
+        expect(@job.command).to be_nil
+      end
+    end
+
+  end
 end
