@@ -274,6 +274,11 @@ RSpec.describe Job, :type => :model do
       @job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
       @job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
       @job.save!
+      FileUtils.rm_rf("tmp/job_work/#{Rails.env}/#{@job.id}")
+    end
+
+    after do
+      FileUtils.rm_rf("tmp/job_work/#{Rails.env}/#{@job.id}")
     end
 
     context 'with vicuna' do
@@ -321,6 +326,15 @@ RSpec.describe Job, :type => :model do
         @job.tool = 'bowtie2'
         @job.save!
         expect(@job.command).to match /bowtie2/
+      end
+
+      it 'created work dir' do
+        @job.tool = 'bowtie2'
+        @job.save!
+        @job.command
+
+        isExist = FileTest.exist?("tmp/job_work/#{Rails.env}/#{@job.id}")
+        expect(isExist).to be true
       end
     end
 
