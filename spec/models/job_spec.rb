@@ -4,18 +4,16 @@ RSpec.describe Job, :type => :model do
 
   describe '#schedule' do
     before do
-      job = Job.new
-      job.tool = 'bwa'
-      job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
-      job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
-      job.save!
-      @job_id = job.id
+      @job = Job.new
+      @job.tool = 'bwa'
+      @job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      @job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      @job.save!
     end
 
-    context 'with valid job_id' do
+    context 'with valid job' do
       before do
-        @isSuccess = Job.schedule @job_id
-        @job = Job.first
+        @isSuccess = @job.schedule
       end
 
       it 'return true' do
@@ -33,24 +31,9 @@ RSpec.describe Job, :type => :model do
 
     context 'with invalid data' do
       before do
-        job = Job.first
-        job.tool = nil
-        job.save!(validate: false)
-        @isSuccess = Job.schedule @job_id
-      end
-
-      it 'return false' do
-        expect(@isSuccess).to eq false
-      end
-
-      it 'do not create JobQueue' do
-        expect(JobQueue.all.count).to eq 0
-      end
-    end
-
-    context 'with not found Job' do
-      before do
-        @isSuccess = Job.schedule 0
+        @job.tool = nil
+        @job.save!(validate: false)
+        @isSuccess = @job.schedule
       end
 
       it 'return false' do
@@ -65,19 +48,17 @@ RSpec.describe Job, :type => :model do
 
   describe '#be_doing' do
     before do
-      job = Job.new
-      job.tool = 'bwa'
-      job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
-      job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
-      job.save!
-      @job_id = job.id
+      @job = Job.new
+      @job.tool = 'bwa'
+      @job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      @job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      @job.save!
     end
 
     context 'with valid data' do
       before do
-        Job.schedule @job_id
-        @isSuccess = Job.be_doing @job_id
-        @job = Job.first
+        @job.schedule
+        @isSuccess = @job.be_doing
       end
 
       it 'return true' do
@@ -95,26 +76,10 @@ RSpec.describe Job, :type => :model do
 
     context 'with invalid data' do
       before do
-        Job.schedule @job_id
-        job = Job.first
-        job.tool = nil
-        job.save!(validate: false)
-        @isSuccess = Job.be_doing @job_id
-      end
-
-      it 'return false' do
-        expect(@isSuccess).to eq false
-      end
-
-      it 'do not create or delete JobQueue' do
-        expect(Job.all.count).to eq 1
-      end
-    end
-
-    context 'with not found Job' do
-      before do
-        Job.schedule @job_id
-        @isSuccess = Job.be_doing 0
+        @job.schedule
+        @job.tool = nil
+        @job.save!(validate: false)
+        @isSuccess = @job.be_doing
       end
 
       it 'return false' do
@@ -129,20 +94,18 @@ RSpec.describe Job, :type => :model do
 
   describe '#cancel' do
     before do
-      job = Job.new
-      job.tool = 'bwa'
-      job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
-      job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
-      job.save!
-      @job_id = job.id
+      @job = Job.new
+      @job.tool = 'bwa'
+      @job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      @job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      @job.save!
     end
 
     context 'with valid data' do
       before do
-        JobQueue.create!(job_id: @job_id+1)
-        Job.schedule @job_id
-        @isSuccess = Job.cancel @job_id
-        @job = Job.first
+        JobQueue.create!(job_id: @job.id + 1)
+        @job.schedule
+        @isSuccess = @job.cancel
       end
 
       it 'return true' do
@@ -161,26 +124,10 @@ RSpec.describe Job, :type => :model do
 
     context 'with invalid data' do
       before do
-        Job.schedule @job_id
-        job = Job.first
-        job.tool = nil
-        job.save!(validate: false)
-        @isSuccess = Job.cancel @job_id
-      end
-
-      it 'return false' do
-        expect(@isSuccess).to eq false
-      end
-
-      it 'do not delete JobQueue' do
-        expect(Job.all.count).to eq 1
-      end
-    end
-
-    context 'with not found Job' do
-      before do
-        Job.schedule @job_id
-        @isSuccess = Job.cancel 0
+        @job.schedule
+        @job.tool = nil
+        @job.save!(validate: false)
+        @isSuccess = @job.cancel
       end
 
       it 'return false' do
@@ -195,20 +142,18 @@ RSpec.describe Job, :type => :model do
 
   describe '#be_done' do
     before do
-      job = Job.new
-      job.tool = 'bwa'
-      job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
-      job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
-      job.save!
-      @job_id = job.id
+      @job = Job.new
+      @job.tool = 'bwa'
+      @job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      @job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      @job.save!
     end
 
     context 'with valid data' do
       before do
-        JobQueue.create!(job_id: @job_id+1)
-        Job.schedule @job_id
-        @isSuccess = Job.be_done @job_id
-        @job = Job.first
+        JobQueue.create!(job_id: @job.id + 1)
+        @job.schedule
+        @isSuccess = @job.be_done
       end
 
       it 'return true' do
@@ -227,26 +172,10 @@ RSpec.describe Job, :type => :model do
 
     context 'with invalid data' do
       before do
-        Job.schedule @job_id
-        job = Job.first
-        job.tool = nil
-        job.save!(validate: false)
-        @isSuccess = Job.be_done @job_id
-      end
-
-      it 'return false' do
-        expect(@isSuccess).to eq false
-      end
-
-      it 'do not delete JobQueue' do
-        expect(Job.all.count).to eq 1
-      end
-    end
-
-    context 'with not found Job' do
-      before do
-        Job.schedule @job_id
-        @isSuccess = Job.be_done 0
+        @job.schedule
+        @job.tool = nil
+        @job.save!(validate: false)
+        @isSuccess = @job.be_done
       end
 
       it 'return false' do
@@ -261,20 +190,18 @@ RSpec.describe Job, :type => :model do
 
   describe '#error_occurred' do
     before do
-      job = Job.new
-      job.tool = 'bwa'
-      job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
-      job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
-      job.save!
-      @job_id = job.id
+      @job = Job.new
+      @job.tool = 'bwa'
+      @job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      @job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      @job.save!
     end
 
     context 'with valid data' do
       before do
-        JobQueue.create!(job_id: @job_id+1)
-        Job.schedule @job_id
-        @isSuccess = Job.error_occurred @job_id
-        @job = Job.first
+        JobQueue.create!(job_id: @job.id + 1)
+        @job.schedule
+        @isSuccess = @job.error_occurred
       end
 
       it 'return true' do
@@ -293,26 +220,10 @@ RSpec.describe Job, :type => :model do
 
     context 'with invalid data' do
       before do
-        Job.schedule @job_id
-        job = Job.first
-        job.tool = nil
-        job.save!(validate: false)
-        @isSuccess = Job.error_occurred @job_id
-      end
-
-      it 'return false' do
-        expect(@isSuccess).to eq false
-      end
-
-      it 'do not delete JobQueue' do
-        expect(Job.all.count).to eq 1
-      end
-    end
-
-    context 'with not found Job' do
-      before do
-        Job.schedule @job_id
-        @isSuccess = Job.error_occurred 0
+        @job.schedule
+        @job.tool = nil
+        @job.save!(validate: false)
+        @isSuccess = @job.error_occurred
       end
 
       it 'return false' do

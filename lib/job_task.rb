@@ -10,7 +10,7 @@ class JobTask
     def check_done
       jobs = Job.where("jobs.status = 'doing'")
       (jobs || []).each do |job|
-        JOB.be_done job.id if job.done?
+        job.be_done if job.done?
       end
     end
 
@@ -22,7 +22,7 @@ class JobTask
 
       # execute linux command
       if job_queue && job_queue.job
-        Job.be_doing job_queue.job_id
+        job_queue.job.be_doing
 
         begin
           command = job_queue.job.command
@@ -33,7 +33,7 @@ class JobTask
           }
         rescue => e
           puts e.message
-          Job.error_occurred job_queue.job_id and return
+          job_queue.job.error_occurred and return
         end
       end
     end

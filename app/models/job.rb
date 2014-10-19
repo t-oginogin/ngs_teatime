@@ -18,75 +18,71 @@ class Job < ActiveRecord::Base
             'error' => I18n.t('messages.status.error'),
             'done' => I18n.t('messages.status.done')}
 
-  class << self
-    def schedule( job_id )
-      Job.transaction do
-        JobQueue.new(job_id: job_id).save!
-        job = Job.find job_id
-        job.status = 'scheduled'
-        job.save!
-      end
-        true
-      rescue => e
-        logger.error(I18n.t('messages.schedule_job_failed'))
-        logger.error(e.message)
-        false
+  def schedule
+    Job.transaction do
+      self.create_job_queue
+      self.status = 'scheduled'
+      self.save!
     end
+      true
+    rescue => e
+      logger.error(I18n.t('messages.schedule_job_failed'))
+      logger.error(e.message)
+      false
+  end
 
-    def be_doing( job_id )
-      Job.transaction do
-        job = Job.find job_id
-        job.status = 'doing'
-        job.save!
-      end
-        true
-      rescue => e
-        logger.error(I18n.t('messages.doing_job_failed'))
-        logger.error(e.message)
-        false
+  def be_doing
+    Job.transaction do
+      self.status = 'doing'
+      self.save!
     end
+      true
+    rescue => e
+      logger.error(I18n.t('messages.doing_job_failed'))
+      logger.error(e.message)
+      false
+  end
 
-    def cancel( job_id )
-      Job.transaction do
-        JobQueue.find_by(job_id: job_id).destroy!
-        job = Job.find job_id
-        job.status = 'canceled'
-        job.save!
-      end
-        true
-      rescue => e
-        logger.error(I18n.t('messages.cancel_job_failed'))
-        logger.error(e.message)
-        false
+  def cancel
+    Job.transaction do
+      self.job_queue.destroy!
+      self.job_queue = nil
+      self.status = 'canceled'
+      self.save!
     end
+      true
+    rescue => e
+      logger.error(I18n.t('messages.cancel_job_failed'))
+      logger.error(e.message)
+      false
+  end
 
-    def be_done( job_id )
-      Job.transaction do
-        JobQueue.find_by(job_id: job_id).destroy!
-        job = Job.find job_id
-        job.status = 'done'
-        job.save!
-      end
-        true
-      rescue => e
-        logger.error(I18n.t('messages.done_job_failed'))
-        logger.error(e.message)
-        false
+  def be_done
+    Job.transaction do
+      self.job_queue.destroy!
+      self.job_queue = nil
+      self.status = 'done'
+      self.save!
     end
+      true
+    rescue => e
+      logger.error(I18n.t('messages.done_job_failed'))
+      logger.error(e.message)
+      false
+  end
 
-    def error_occurred( job_id )
-      Job.transaction do
-        JobQueue.find_by(job_id: job_id).destroy!
-        job = Job.find job_id
-        job.status = 'error'
-        job.save!
-      end
-        true
-      rescue => e
-        logger.error(I18n.t('messages.error_occurred_job_failed'))
-        logger.error(e.message)
-        false
+  def error_occurred
+    Job.transaction do
+      self.job_queue.destroy!
+      self.job_queue = nil
+      self.status = 'error'
+      self.save!
     end
+      true
+    rescue => e
+      logger.error(I18n.t('messages.error_occurred_job_failed'))
+      logger.error(e.message)
+      false
   end
 
   def update_with_status( params )
@@ -98,6 +94,12 @@ class Job < ActiveRecord::Base
 
   def command
     self.send "#{self.tool}_command" if self.tool.present?
+  end
+
+  def done?
+    work_path = create_work_path
+    return true if FileTest.exist?("#{work_path}/cmp")
+    false
   end
 
   private
@@ -161,21 +163,20 @@ class Job < ActiveRecord::Base
   end
 
   def bowtie2_command
-    logger.error "bowtie2 command is not supported now"
-    return nil
-=begin
-    cmp_path = "tmp/job_work/#{self.id}/cmp"
+    work_path = create_work_path
+    cmp_path = "#{work_path}/cmp"
 
     command = <<-"EOS"
-    bowtie2 -p 2 --un-conc #{self.id}_un.fastq --al-conc #{self.id}_al.fastq -x #{File.dirname(self.reference_file_1.path)} -1 #{self.target_fastq_1.path} -2 #{self.target_fastq_2.path} > /dev/null 2> tmp/job_work/#{self.id}/bowtie2.log
+    bowtie2 -p 2 --un-conc #{self.id}_un.fastq --al-conc #{self.id}_al.fastq -x #{File.dirname(self.reference_file_1.path)} -1 #{self.target_file_1.path} -2 #{self.target_file_2.path} > /dev/null &2> tmp/job_work/#{self.id}/bowtie2.log
     touch #{cmp_path}
     EOS
     command
-=end
   end
 
-  def done?
-    # TODO: if 'cmp' file is exist then return true
-    false
+  def create_work_path
+    work_path = "tmp/job_work/#{self.id}"
+    FileUtils.mkdir_p(work_path) unless FileTest.exist?(work_path)
+    work_path
   end
+
 end

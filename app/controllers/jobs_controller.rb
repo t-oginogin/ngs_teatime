@@ -1,5 +1,5 @@
 class JobsController < ApplicationController
-  before_action :set_job, only: [:show, :edit, :update, :destroy]
+  before_action :set_job, only: [:show, :edit, :update, :destroy, :schedule, :cancel]
 
   # GET /jobs
   # GET /jobs.json
@@ -24,7 +24,7 @@ class JobsController < ApplicationController
   # GET /jobs/1/schedule
   def schedule
     respond_to do |format|
-      if Job.schedule params[:id]
+      if @job.schedule
         format.html { redirect_to jobs_url, notice: t('messages.scheduled_job') }
       else
         format.html { redirect_to jobs_url, alert: t('messages.schedule_job_failed') }
@@ -35,7 +35,7 @@ class JobsController < ApplicationController
   # GET /jobs/1/cancel
   def cancel
     respond_to do |format|
-      if Job.cancel params[:id]
+      if @job.cancel
         format.html { redirect_to jobs_url, notice: t('messages.canceled_job') }
       else
         format.html { redirect_to jobs_url, alert: t('messages.cancel_job_failed') }
