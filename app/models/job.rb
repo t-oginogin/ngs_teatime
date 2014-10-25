@@ -165,7 +165,7 @@ class Job < ActiveRecord::Base
     create_work_dir
 
     command = <<-"EOS"
-    bowtie2 -p 2 --un-conc #{self.id}_un.fastq --al-conc #{self.id}_al.fastq -x #{File.dirname(self.reference_file_1.path)} -1 #{self.target_file_1.path} -2 #{self.target_file_2.path} > /dev/null &2> tmp/job_work/#{Rails.env}/#{self.id}/bowtie2.log
+    bowtie2 -p 2 --un-conc #{work_path}/job_#{self.id}_un.fastq --al-conc #{work_path}/job_#{self.id}_al.fastq -x #{File.dirname(self.reference_file_1.path)} -1 #{self.target_file_1.path} -2 #{self.target_file_2.path} > /dev/null 2> #{work_path}/job_#{self.id}.log
     touch #{cmp_path}
     EOS
     command
