@@ -27,12 +27,12 @@ class JobTask
         begin
           command = job_queue.job.command
           raise 'Job command was not found.' unless command
-          IO.popen("#{job_queue.job.command}"){|ngs_io|
-            job_queue.command_pid = ngs_io.pid
-            job_queue.save!
-          }
+
+          pipe = IO.popen(command)
+          job_queue.command_pid = pipe.pid
+          job_queue.save!
         rescue => e
-          puts e.message
+          Rails.logger.error e.message
           job_queue.job.error_occurred and return
         end
       end
