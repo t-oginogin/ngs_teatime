@@ -112,13 +112,12 @@ RSpec.describe Job, :type => :model do
         expect(@isSuccess).to eq true
       end
 
-      it "change status to be 'canceled'" do
-        expect(@job.status).to eq 'canceled'
+      it "change status to be 'canceling'" do
+        expect(@job.status).to eq 'canceling'
       end
 
-      it 'delete JobQueue with job_id' do
-        expect(Job.all.count).to eq 1
-        expect(@job.job_queue).to be_nil 
+      it 'do not delete JobQueue with job_id' do
+        expect(JobQueue.all.count).to eq 2
       end
     end
 
@@ -135,7 +134,55 @@ RSpec.describe Job, :type => :model do
       end
 
       it 'do not delete JobQueue' do
-        expect(Job.all.count).to eq 1
+        expect(JobQueue.all.count).to eq 1
+      end
+    end
+  end
+
+  describe '#be_canceled' do
+    before do
+      @job = Job.new
+      @job.tool = 'bwa'
+      @job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      @job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      @job.save!
+    end
+
+    context 'with valid data' do
+      before do
+        JobQueue.create!(job_id: @job.id + 1)
+        @job.schedule
+        @isSuccess = @job.be_canceled
+      end
+
+      it 'return true' do
+        expect(@isSuccess).to eq true
+      end
+
+      it "change status to be 'canceled'" do
+        expect(@job.status).to eq 'canceled'
+      end
+
+      it 'delete JobQueue with job_id' do
+        expect(JobQueue.all.count).to eq 1
+        expect(@job.job_queue).to be_nil
+      end
+    end
+
+    context 'with invalid data' do
+      before do
+        @job.schedule
+        @job.tool = nil
+        @job.save!(validate: false)
+        @isSuccess = @job.be_canceled
+      end
+
+      it 'return false' do
+        expect(@isSuccess).to eq false
+      end
+
+      it 'do not delete JobQueue' do
+        expect(JobQueue.all.count).to eq 1
       end
     end
   end

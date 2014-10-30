@@ -14,6 +14,7 @@ class Job < ActiveRecord::Base
   STATUS = {'created' => I18n.t('messages.status.created'),
             'scheduled' => I18n.t('messages.status.scheduled'),
             'doing' => I18n.t('messages.status.doing'),
+            'canceling' => I18n.t('messages.status.canceling'),
             'canceled' => I18n.t('messages.status.canceled'),
             'error' => I18n.t('messages.status.error'),
             'done' => I18n.t('messages.status.done')}
@@ -44,6 +45,18 @@ class Job < ActiveRecord::Base
   end
 
   def cancel
+    Job.transaction do
+      self.status = 'canceling'
+      self.save!
+    end
+      true
+    rescue => e
+      logger.error(I18n.t('messages.canceling_job_failed'))
+      logger.error(e.message)
+      false
+  end
+
+  def be_canceled
     Job.transaction do
       self.job_queue.destroy!
       self.job_queue = nil

@@ -2,6 +2,7 @@ class JobTask
   class << self
     def execute
       check_done
+      check_cancel
       execute_job
     end
 
@@ -11,6 +12,14 @@ class JobTask
       jobs = Job.where("jobs.status = 'doing'")
       (jobs || []).each do |job|
         job.be_done if job.done?
+      end
+    end
+
+    def check_cancel
+      jobs = Job.where("jobs.status = 'canceling'")
+      (jobs || []).each do |job|
+        IO.popen("kill -TERM #{job.job_queue.command_pid}")
+        job.be_canceled
       end
     end
 
