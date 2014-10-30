@@ -70,7 +70,7 @@ RSpec.describe Job, :type => :model do
       end
 
       it 'do not create or delete JobQueue' do
-        expect(Job.all.count).to eq 1
+        expect(JobQueue.all.count).to eq 1
       end
     end
 
@@ -87,7 +87,7 @@ RSpec.describe Job, :type => :model do
       end
 
       it 'do not create or delete JobQueue' do
-        expect(Job.all.count).to eq 1
+        expect(JobQueue.all.count).to eq 1
       end
     end
   end
@@ -212,7 +212,7 @@ RSpec.describe Job, :type => :model do
       end
 
       it 'delete JobQueue with job_id' do
-        expect(Job.all.count).to eq 1
+        expect(JobQueue.all.count).to eq 1
         expect(@job.job_queue).to be_nil
       end
     end
@@ -230,7 +230,7 @@ RSpec.describe Job, :type => :model do
       end
 
       it 'do not delete JobQueue' do
-        expect(Job.all.count).to eq 1
+        expect(JobQueue.all.count).to eq 1
       end
     end
   end
@@ -260,7 +260,7 @@ RSpec.describe Job, :type => :model do
       end
 
       it 'delete JobQueue with job_id' do
-        expect(Job.all.count).to eq 1
+        expect(JobQueue.all.count).to eq 1
         expect(@job.job_queue).to be_nil
       end
     end
@@ -278,7 +278,7 @@ RSpec.describe Job, :type => :model do
       end
 
       it 'do not delete JobQueue' do
-        expect(Job.all.count).to eq 1
+        expect(JobQueue.all.count).to eq 1
       end
     end
   end
