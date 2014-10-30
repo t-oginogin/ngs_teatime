@@ -1,4 +1,6 @@
 class Job < ActiveRecord::Base
+  after_destroy :delete_work_dir
+
   mount_uploader :target_file_1, FastqUploader
   mount_uploader :target_file_2, FastqUploader
   mount_uploader :reference_file_1, FastqUploader
@@ -193,5 +195,9 @@ class Job < ActiveRecord::Base
 
   def create_work_dir
     FileUtils.mkdir_p(work_path) unless FileTest.exist?(work_path)
+  end
+
+  def delete_work_dir
+    FileUtils.rm_rf(work_path) if FileTest.exist?(work_path)
   end
 end

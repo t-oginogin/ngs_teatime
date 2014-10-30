@@ -394,4 +394,29 @@ RSpec.describe Job, :type => :model do
     end
 
   end
+
+  describe '#delete_work_dir' do
+    before do
+      @job = Job.new
+      @job.tool = 'bwa'
+      @job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      @job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      @job.save!
+      @job.schedule
+      @job.be_doing
+      JobTask.execute
+    end
+
+    it 'delete work directory' do
+      work_dir = "#{Rails.root}/tmp/job_work/#{Rails.env}/#{@job.id}"
+      FileUtils.mkdir_p(work_dir)
+      FileUtils.touch("#{work_dir}/test.log")
+      expect(FileTest.exist?(work_dir)).to eq true
+
+      @job.destroy
+
+      expect(FileTest.exist?(work_dir)).to eq false
+    end
+  end
+
 end
