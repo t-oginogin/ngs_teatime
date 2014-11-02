@@ -419,4 +419,53 @@ RSpec.describe Job, :type => :model do
     end
   end
 
+  describe '#result_files' do
+    before do
+      @job = Job.new
+      @job.tool = 'bowtie2'
+      @job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      @job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      @job.reference_genome = 'hg19'
+      @job.save!
+      work_dir = "#{Rails.root}/tmp/job_work/#{Rails.env}/#{@job.id}"
+      FileUtils.mkdir_p(work_dir)
+      FileUtils.touch("#{work_dir}/test1.log")
+      FileUtils.touch("#{work_dir}/test2.log")
+    end
+
+    after do
+      @job.destroy
+    end
+
+    it 'returns result files' do
+      files = @job.result_files
+
+      expect(files.first).to eq "test1.log"
+      expect(files.last).to eq "test2.log"
+    end
+  end
+
+  describe '#result_file' do
+    before do
+      @job = Job.new
+      @job.tool = 'bowtie2'
+      @job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      @job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      @job.reference_genome = 'hg19'
+      @job.save!
+      work_dir = "#{Rails.root}/tmp/job_work/#{Rails.env}/#{@job.id}"
+      FileUtils.mkdir_p(work_dir)
+      FileUtils.touch("#{work_dir}/test1.log")
+    end
+
+    after do
+      @job.destroy
+    end
+
+    it 'returns result files' do
+      file = @job.result_file 'test1.log'
+
+      expect(file).to eq "#{Rails.root}/tmp/job_work/#{Rails.env}/#{@job.id}/test1.log"
+    end
+  end
 end
