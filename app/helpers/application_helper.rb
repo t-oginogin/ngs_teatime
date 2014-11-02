@@ -7,4 +7,9 @@ module ApplicationHelper
      %w[bowtie bowtie],
      %w[bowtie2 bowtie2]]
   end
+
+  def reference_genome_labels
+    [%w[hg19 hg19],
+     %w[Ribosomal_RNA Ribosomal_RNA]]
+  end
 end

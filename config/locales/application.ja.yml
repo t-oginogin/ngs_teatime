@@ -10,6 +10,7 @@ ja:
         target_file_2: 対象ファイル2
         reference_file_1: 参照ファイル1
         reference_file_2: 参照ファイル2
+        reference_genome: 参照ゲノム
         comment: コメント
         status: 実行状態 
   messages:

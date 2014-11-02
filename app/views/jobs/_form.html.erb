@@ -99,6 +99,15 @@
 
   <div class="row form-group">
     <div class="col-md-2">
+      <%= f.label :reference_genome %>*<br>
+    </div>
+    <div class="col-md-2">
+      <%= f.select :reference_genome, reference_genome_labels, {}, class: 'form-control' %>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-2">
       <%= f.label :comment %><br>
     </div>
     <div class="col-md-4">

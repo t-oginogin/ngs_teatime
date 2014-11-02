@@ -10,7 +10,6 @@ class Job < ActiveRecord::Base
 
   validates_presence_of :tool
   validates_presence_of :target_file_1
-  validates_presence_of :reference_file_1
   validates_presence_of :status
 
   STATUS = {'created' => I18n.t('messages.status.created'),
@@ -180,7 +179,7 @@ class Job < ActiveRecord::Base
     create_work_dir
 
     command = <<-"EOS"
-    exec bowtie2 -p 2 --un-conc #{work_path}/job_#{self.id}_un.fastq --al-conc #{work_path}/job_#{self.id}_al.fastq -x #{File.dirname(self.reference_file_1.path)} -1 #{self.target_file_1.path} -2 #{self.target_file_2.path} > /dev/null 2> #{work_path}/job_#{self.id}.log
+    exec bowtie2 -p 2 --un-conc #{work_path}/job_#{self.id}_un.fastq --al-conc #{work_path}/job_#{self.id}_al.fastq -x #{indexes_path}#{self.reference_genome} -1 #{self.target_file_1.path} -2 #{self.target_file_2.path} > /dev/null 2> #{work_path}/job_#{self.id}.log
     EOS
     command
   end
@@ -199,5 +198,9 @@ class Job < ActiveRecord::Base
 
   def delete_work_dir
     FileUtils.rm_rf(work_path) if FileTest.exist?(work_path)
+  end
+
+  def indexes_path
+    "/ngs/data/indexes/"
   end
 end
