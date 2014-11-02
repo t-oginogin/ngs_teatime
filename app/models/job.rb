@@ -115,6 +115,14 @@ class Job < ActiveRecord::Base
     false
   end
 
+  def result_files
+    Dir.glob("#{Rails.root}/#{work_path}/*").map {|f| File.basename f}
+  end
+
+  def result_file( file_name )
+    "#{Rails.root}/#{work_path}/#{file_name}"
+  end
+
   private
 
   def vicuna_command

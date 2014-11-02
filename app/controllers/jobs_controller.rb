@@ -1,5 +1,5 @@
 class JobsController < ApplicationController
-  before_action :set_job, only: [:show, :edit, :update, :destroy, :schedule, :cancel]
+  before_action :set_job, only: [:show, :edit, :update, :destroy, :schedule, :cancel, :download_result_file]
 
   # GET /jobs
   # GET /jobs.json
@@ -81,6 +81,12 @@ class JobsController < ApplicationController
       format.html { redirect_to jobs_url, notice: t('messages.deleted_job') }
       format.json { head :no_content }
     end
+  end
+
+  # GET /jobs/1/download_result_file
+  def download_result_file
+    render show_job_path(params[:id]) and return if params[:file_name].blank?
+    send_file @job.result_file(params[:file_name])
   end
 
   private

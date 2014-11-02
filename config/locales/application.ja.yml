@@ -12,6 +12,7 @@ ja:
         reference_file_2: 参照ファイル2
         reference_genome: 参照ゲノム
         comment: コメント
+        results: 結果
         status: 実行状態 
   messages:
     show: '表示'

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'jobs/:id/download_result_file' => 'jobs#download_result_file', as: :download_jobs_result_file
+
   get 'jobs/:id/schedule' => 'jobs#schedule', as: :schedule_job
   get 'jobs/:id/cancel' => 'jobs#cancel', as: :cancel_job
 
