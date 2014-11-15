@@ -111,8 +111,18 @@ class Job < ActiveRecord::Base
   end
 
   def done?
-    return true if FileTest.exist?(cmp_path)
-    false
+    pid = self.job_queue.command_pid
+    begin
+      command = "exec ps #{pid}"
+      result = IO.popen("exec ps #{pid}") do |f|
+        f.readlines.join
+      end if pid.present?
+
+      return false if result =~ /#{pid}/
+    rescue => e
+      Rails.logger.error e.message
+    end
+    true
   end
 
   def result_files
