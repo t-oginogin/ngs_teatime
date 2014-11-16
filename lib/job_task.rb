@@ -18,6 +18,7 @@ class JobTask
     def check_cancel
       jobs = Job.where("jobs.status = 'canceling'")
       (jobs || []).each do |job|
+        next if job.job_queue.command_pid.blank?
         IO.popen("kill -TERM #{job.job_queue.command_pid}")
         job.be_canceled
       end
