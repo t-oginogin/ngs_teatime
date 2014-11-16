@@ -37,8 +37,13 @@ class JobTask
           command = job_queue.job.command
           raise 'Job command was not found.' unless command
 
-          pipe = IO.popen(command)
-          job_queue.command_pid = pipe.pid
+          IO.popen(command) {}
+          IO.popen("ps aux | grep -E \"#{job_queue.job.tool}\.\*job_#{job_queue.job.id}\"") do |pipe|
+            pipe.readlines.each do |line|
+              job_queue.command_pid = line.split[1] if line =~ /^(?!.*grep -E).*$/
+            end
+          end
+
           job_queue.save!
         rescue => e
           Rails.logger.error e.message
