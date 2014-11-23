@@ -67,38 +67,6 @@
 
   <div class="row form-group">
     <div class="col-md-2">
-      <%= f.label :reference_file_1 %>*<br>
-    </div>
-    <div class="col-md-4">
-      <%= f.file_field :reference_file_1, class: 'filestyle form-control' %>
-      <%= f.hidden_field :reference_file_1_cache %>
-    </div>
-    <% if @job.reference_file_1? %>
-      <div class="checkbox col-md-2">
-        <%= f.check_box :remove_reference_file_1 %>
-        <%= t('messages.delete_file') %>
-      </div>
-    <% end %>
-  </div>
-
-  <div class="row form-group">
-    <div class="col-md-2">
-      <%= f.label :reference_file_2 %><br>
-    </div>
-    <div class="col-md-4">
-      <%= f.file_field :reference_file_2, class: 'filestyle form-control' %>
-      <%= f.hidden_field :reference_file_2_cache %>
-    </div>
-    <% if @job.reference_file_2? %>
-      <div class="checkbox col-md-2">
-        <%= f.check_box :remove_reference_file_2 %>
-        <%= t('messages.delete_file') %>
-      </div>
-    <% end %>
-  </div>
-
-  <div class="row form-group">
-    <div class="col-md-2">
       <%= f.label :reference_genome %>*<br>
     </div>
     <div class="col-md-2">

@@ -9,8 +9,6 @@
       <th><%= t('activerecord.attributes.job.tool') %></th>
       <th><%= t('activerecord.attributes.job.target_file_1') %></th>
       <th><%= t('activerecord.attributes.job.target_file_2') %></th>
-      <th><%= t('activerecord.attributes.job.reference_file_1') %></th>
-      <th><%= t('activerecord.attributes.job.reference_file_2') %></th>
       <th><%= t('activerecord.attributes.job.reference_genome') %></th>
       <th><%= t('activerecord.attributes.job.comment') %></th>
       <th><%= t('activerecord.attributes.job.status') %></th>
@@ -25,8 +23,6 @@
         <td><%= job.tool %></td>
         <td><%= job.target_file_1.file.try(:filename) if job.target_file_1 %></td>
         <td><%= job.target_file_2.file.try(:filename) if job.target_file_2 %></td>
-        <td><%= job.reference_file_1.file.try(:filename) if job.reference_file_1 %></td>
-        <td><%= job.reference_file_2.file.try(:filename) if job.reference_file_2 %></td>
         <td><%= job.reference_genome %></td>
         <td><%= job.comment %></td>
         <td><%= Job::STATUS[job.status] %></td>

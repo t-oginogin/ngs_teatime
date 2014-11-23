@@ -100,8 +100,6 @@ class JobsController < ApplicationController
       params.require(:job).permit(:tool, :comment,
                                   :target_file_1, :target_file_1_cache, :remove_target_file_1,
                                   :target_file_2, :target_file_2_cache, :remove_target_file_2,
-                                  :reference_file_1, :reference_file_1_cache, :remove_reference_file_1,
-                                  :reference_file_2, :reference_file_2_cache, :remove_reference_file_2,
                                   :reference_genome)
     end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141102114436) do
+ActiveRecord::Schema.define(version: 20141123010629) do
 
   create_table "job_queues", force: true do |t|
     t.integer  "job_id"
@@ -24,8 +24,6 @@ ActiveRecord::Schema.define(version: 20141102114436) do
     t.string   "tool"
     t.string   "target_file_1"
     t.string   "target_file_2"
-    t.string   "reference_file_1"
-    t.string   "reference_file_2"
     t.string   "comment"
     t.string   "status",           default: "created"
     t.datetime "created_at"

@@ -3,8 +3,6 @@ class Job < ActiveRecord::Base
 
   mount_uploader :target_file_1, FastqUploader
   mount_uploader :target_file_2, FastqUploader
-  mount_uploader :reference_file_1, FastqUploader
-  mount_uploader :reference_file_2, FastqUploader
 
   has_one :job_queue
 

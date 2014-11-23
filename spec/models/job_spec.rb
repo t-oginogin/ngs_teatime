@@ -7,7 +7,6 @@ RSpec.describe Job, :type => :model do
       @job = Job.new
       @job.tool = 'bwa'
       @job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
-      @job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
       @job.save!
     end
 
@@ -51,7 +50,6 @@ RSpec.describe Job, :type => :model do
       @job = Job.new
       @job.tool = 'bwa'
       @job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
-      @job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
       @job.save!
     end
 
@@ -97,7 +95,6 @@ RSpec.describe Job, :type => :model do
       @job = Job.new
       @job.tool = 'bwa'
       @job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
-      @job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
       @job.save!
     end
 
@@ -144,7 +141,6 @@ RSpec.describe Job, :type => :model do
       @job = Job.new
       @job.tool = 'bwa'
       @job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
-      @job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
       @job.save!
     end
 
@@ -192,7 +188,6 @@ RSpec.describe Job, :type => :model do
       @job = Job.new
       @job.tool = 'bwa'
       @job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
-      @job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
       @job.save!
     end
 
@@ -240,7 +235,6 @@ RSpec.describe Job, :type => :model do
       @job = Job.new
       @job.tool = 'bwa'
       @job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
-      @job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
       @job.save!
     end
 
@@ -288,14 +282,13 @@ RSpec.describe Job, :type => :model do
       @job = Job.new
       @job.tool = 'bwa'
       @job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
-      @job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
       @job.status = 'canceled'
       @job.save!
     end
 
     context 'with valid params' do
       it "change status to be 'created'" do
-        params = {tool: @job.tool, target_file_1: @job.target_file_1, reference_file_1: @job.reference_file_1}
+        params = {tool: @job.tool, target_file_1: @job.target_file_1}
 
         @job.update_with_status params
 
@@ -305,7 +298,7 @@ RSpec.describe Job, :type => :model do
 
     context 'with invalid params' do
       it 'do not change status' do
-        params = {tool: nil, target_file_1: nil, reference_file_1: nil}
+        params = {tool: nil, target_file_1: nil}
 
         @job.update_with_status params
 
@@ -319,7 +312,6 @@ RSpec.describe Job, :type => :model do
       @job = Job.new
       @job.tool = 'vicuna'
       @job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
-      @job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
       @job.save!
       FileUtils.rm_rf("tmp/job_work/#{Rails.env}/#{@job.id}")
     end
@@ -400,7 +392,6 @@ RSpec.describe Job, :type => :model do
       @job = Job.new
       @job.tool = 'bwa'
       @job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
-      @job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
       @job.save!
       @job.schedule
       @job.be_doing
@@ -424,7 +415,6 @@ RSpec.describe Job, :type => :model do
       @job = Job.new
       @job.tool = 'bowtie2'
       @job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
-      @job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
       @job.reference_genome = 'hg19'
       @job.save!
       work_dir = "#{Rails.root}/tmp/job_work/#{Rails.env}/#{@job.id}"
@@ -450,7 +440,6 @@ RSpec.describe Job, :type => :model do
       @job = Job.new
       @job.tool = 'bowtie2'
       @job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
-      @job.reference_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
       @job.reference_genome = 'hg19'
       @job.save!
       work_dir = "#{Rails.root}/tmp/job_work/#{Rails.env}/#{@job.id}"

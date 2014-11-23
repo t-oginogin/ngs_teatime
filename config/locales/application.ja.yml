@@ -8,8 +8,6 @@ ja:
         tool: ツール
         target_file_1: 対象ファイル1
         target_file_2: 対象ファイル2
-        reference_file_1: 参照ファイル1
-        reference_file_2: 参照ファイル2
         reference_genome: 参照ゲノム
         comment: コメント
         results: 結果
