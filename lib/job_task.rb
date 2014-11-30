@@ -22,7 +22,8 @@ class JobTask
     def check_cancel
       jobs = Job.where("jobs.status = 'canceling'")
       (jobs || []).each do |job|
-        next if job.job_queue.command_pid.blank?
+        job.be_canceled and next if job.job_queue.command_pid.blank?
+
         command = "ps -p #{job.job_queue.command_pid} -o \"pgid\""
         pgid = system_command(command).lines.to_a.last.lstrip.chomp
         if pgid =~ /[0-9]/
