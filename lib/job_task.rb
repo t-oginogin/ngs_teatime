@@ -8,6 +8,10 @@ class JobTask
 
     private
 
+    def system_command(command)
+      `#{command}`
+    end
+
     def check_done
       jobs = Job.where("jobs.status = 'doing'")
       (jobs || []).each do |job|
@@ -19,7 +23,13 @@ class JobTask
       jobs = Job.where("jobs.status = 'canceling'")
       (jobs || []).each do |job|
         next if job.job_queue.command_pid.blank?
-        IO.popen("kill -TERM #{job.job_queue.command_pid}")
+        command = "ps -p #{job.job_queue.command_pid} -o \"pgid\""
+        pgid = system_command(command).lines.to_a.last.lstrip.chomp
+        if pgid =~ /[0-9]/
+          system_command "kill -TERM -#{pgid}"
+        else
+          Rails.logger.error 'Process was not found' and next
+        end
         job.be_canceled
       end
     end
@@ -38,13 +48,12 @@ class JobTask
           command = job_queue.job.command
           raise 'Job command was not found.' unless command
 
-          IO.popen(command) {}
-          IO.popen("ps aux | grep -E \"#{job_queue.job.tool}\.\*job_#{job_queue.job.id}\"") do |pipe|
-            pipe.readlines.each do |line|
-              job_queue.command_pid = line.split[1] if line =~ /^(?!.*grep -E).*$/
-            end
+          pid = system_command(command).lstrip.chomp
+          if pid =~ /[0-9]/
+            job_queue.command_pid = pid
+          else
+            Rails.logger.error 'command has not pid'
           end
-
           job_queue.save!
         rescue => e
           Rails.logger.error e.message

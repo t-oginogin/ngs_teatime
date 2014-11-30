@@ -195,7 +195,7 @@ class Job < ActiveRecord::Base
     create_work_dir
 
     command = <<-"EOS"
-    bowtie2 -p 2 --un-conc #{work_path}/job_#{self.id}_un.fastq --al-conc #{work_path}/job_#{self.id}_al.fastq -x #{indexes_path}#{self.reference_genome} -1 #{self.target_file_1.path} -2 #{self.target_file_2.path} > /dev/null 2> #{work_path}/job_#{self.id}.log &
+    bowtie2 -p 2 --un-conc #{work_path}/job_#{self.id}_un.fastq --al-conc #{work_path}/job_#{self.id}_al.fastq -x #{indexes_path}#{self.reference_genome} -1 #{self.target_file_1.path} -2 #{self.target_file_2.path} > /dev/null 2> #{work_path}/job_#{self.id}.log & echo $!
     EOS
     command
   end
