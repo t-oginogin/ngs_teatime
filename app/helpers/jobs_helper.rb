@@ -12,6 +12,6 @@ module JobsHelper
   end
 
   def deletable( job )
-    !(job.status == 'scheduled' || job.status == 'doing')
+    !(job.status == 'scheduled' || job.status == 'doing' || job.status == 'canceling')
   end
 end
