@@ -49,13 +49,16 @@ class JobTask
           command = job_queue.job.command
           raise 'Job command was not found.' unless command
 
-          pid = system_command(command).lstrip.chomp
-          if pid =~ /[0-9]/
-            job_queue.command_pid = pid
-          else
-            Rails.logger.error 'command has not pid'
+          fork do
+            Process.setsid
+            pid = system_command(command).lstrip.chomp
+            if pid =~ /[0-9]/
+              job_queue.command_pid = pid
+              job_queue.save!
+            else
+              Rails.logger.error 'command has not pid'
+            end
           end
-          job_queue.save!
         rescue => e
           Rails.logger.error e.message
           job_queue.job.error_occurred and return
