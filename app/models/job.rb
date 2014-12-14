@@ -111,12 +111,7 @@ class Job < ActiveRecord::Base
   def done?
     pid = self.job_queue.command_pid
     begin
-      command = "exec ps #{pid}"
-      result = IO.popen("exec ps #{pid}") do |f|
-        f.readlines.join
-      end if pid.present?
-
-      return false if result =~ /#{pid}/
+      return false if `ps #{pid}` =~ /#{pid}/
     rescue => e
       Rails.logger.error e.message
     end
