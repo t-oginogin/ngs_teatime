@@ -51,7 +51,7 @@ class JobTask
 
           fork do
             Process.setsid
-            pid = system_command(command).lstrip.chomp
+            pid = system_command(job_queue.job.command_to_script command).lstrip.chomp
             if pid =~ /[0-9]/
               job_queue.command_pid = pid
               job_queue.save!

@@ -108,6 +108,17 @@ class Job < ActiveRecord::Base
     self.send "#{self.tool}_command" if self.tool.present?
   end
 
+  def command_to_script(command)
+    script = "#{work_path}/job_command_#{self.id}.sh"
+
+    File.open(script ,File::RDWR|File::CREAT, 0755) do |f|
+      f.write command
+    end
+
+    # execute background and return pid
+    "#{script} > #{work_path}/job_command_#{self.id}.out 2> #{work_path}/job_command_#{self.id}.err & echo $!"
+  end
+
   def done?
     pid = self.job_queue.command_pid
     begin
@@ -190,8 +201,11 @@ class Job < ActiveRecord::Base
     create_work_dir
 
     command = <<-"EOS"
-    bowtie2 -p 2 --un-conc #{work_path}/job_#{self.id}_un.fastq --al-conc #{work_path}/job_#{self.id}_al.fastq -x #{indexes_path}#{self.reference_genome} -1 #{self.target_file_1.path} -2 #{self.target_file_2.path} > /dev/null 2> #{work_path}/job_#{self.id}.log & echo $!
+    fastq_quality_filter -Q33 -q 20 -p 80 -i #{self.target_file_1.path} | fastq_quality_trimmer -Q33 -t 20 -l 10 -o #{work_path}/job_#{self.id}_1.fastq;
+    fastq_quality_filter -Q33 -q 20 -p 80 -i #{self.target_file_2.path} | fastq_quality_trimmer -Q33 -t 20 -l 10 -o #{work_path}/job_#{self.id}_2.fastq;
+    bowtie2 -p 2 --un-conc #{work_path}/job_#{self.id}_un.fastq --al-conc #{work_path}/job_#{self.id}_al.fastq -x #{indexes_path}#{self.reference_genome} -1 #{work_path}/job_#{self.id}_1.fastq -2 #{work_path}/job_#{self.id}_2.fastq > /dev/null 2> #{work_path}/job_#{self.id}.log;
     EOS
+
     command
   end
 
