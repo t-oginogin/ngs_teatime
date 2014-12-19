@@ -108,15 +108,17 @@ class Job < ActiveRecord::Base
     self.send "#{self.tool}_command" if self.tool.present?
   end
 
-  def command_to_script(command)
-    script = "#{work_path}/job_command_#{self.id}.sh"
+  def script
+    return nil if command.blank?
 
-    File.open(script ,File::RDWR|File::CREAT, 0755) do |f|
+    script_path = "#{work_path}/job_command_#{self.id}.sh"
+
+    File.open(script_path ,File::RDWR|File::CREAT, 0755) do |f|
       f.write command
     end
 
     # execute background and return pid
-    "#{script} > #{work_path}/job_command_#{self.id}.out 2> #{work_path}/job_command_#{self.id}.err & echo $!"
+    "#{script_path} > #{work_path}/job_command_#{self.id}.log 2>&1 & echo $!"
   end
 
   def done?
@@ -133,7 +135,7 @@ class Job < ActiveRecord::Base
     Dir.glob("#{Rails.root}/#{work_path}/*").map {|f| File.basename f}
   end
 
-  def result_file( file_name )
+  def result_file(file_name)
     "#{Rails.root}/#{work_path}/#{file_name}"
   end
 
@@ -199,18 +201,24 @@ class Job < ActiveRecord::Base
 
   def bowtie2_command
     create_work_dir
+    trimmed_result_1 = "#{work_path}/job_#{self.id}_1.fastq"
+    trimmed_result_2 = "#{work_path}/job_#{self.id}_2.fastq"
+    un_conc_result = "#{work_path}/job_#{self.id}_un.fastq"
+    al_conc_result = "#{work_path}/job_#{self.id}_al.fastq"
+    index_file = "#{indexes_path}#{self.reference_genome}"
+    tool_log = "#{work_path}/job_#{self.id}_#{tool}.log"
 
-    command = <<-"EOS"
-    fastq_quality_filter -Q33 -q 20 -p 80 -i #{self.target_file_1.path} | fastq_quality_trimmer -Q33 -t 20 -l 10 -o #{work_path}/job_#{self.id}_1.fastq;
-    fastq_quality_filter -Q33 -q 20 -p 80 -i #{self.target_file_2.path} | fastq_quality_trimmer -Q33 -t 20 -l 10 -o #{work_path}/job_#{self.id}_2.fastq;
-    bowtie2 -p 2 --un-conc #{work_path}/job_#{self.id}_un.fastq --al-conc #{work_path}/job_#{self.id}_al.fastq -x #{indexes_path}#{self.reference_genome} -1 #{work_path}/job_#{self.id}_1.fastq -2 #{work_path}/job_#{self.id}_2.fastq > /dev/null 2> #{work_path}/job_#{self.id}.log;
+    command_string = <<-"EOS"
+    fastq_quality_filter -Q33 -q 20 -p 80 -i #{self.target_file_1.path} | fastq_quality_trimmer -Q33 -t 20 -l 10 -o #{trimmed_result_1};
+    fastq_quality_filter -Q33 -q 20 -p 80 -i #{self.target_file_2.path} | fastq_quality_trimmer -Q33 -t 20 -l 10 -o #{trimmed_result_2};
+    bowtie2 -p 2 --un-conc #{un_conc_result} --al-conc #{al_conc_result} -x #{index_file} -1 #{trimmed_result_1} -2 #{trimmed_result_2} > #{tool_log} 2>&1;
     EOS
 
-    command
+    command_string
   end
 
   def work_path
-    work_path = "tmp/job_work/#{Rails.env}/#{self.id}"
+    "tmp/job_work/#{Rails.env}/#{self.id}"
   end
 
   def cmp_path

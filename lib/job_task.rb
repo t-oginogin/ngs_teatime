@@ -46,12 +46,12 @@ class JobTask
         job_queue.job.be_doing
 
         begin
-          command = job_queue.job.command
-          raise 'Job command was not found.' unless command
+          command = job_queue.job.script
+          raise 'command for job was not found.' unless command
 
           fork do
             Process.setsid
-            pid = system_command(job_queue.job.command_to_script command).lstrip.chomp
+            pid = system_command(command).lstrip.chomp
             if pid =~ /[0-9]/
               job_queue.command_pid = pid
               job_queue.save!
