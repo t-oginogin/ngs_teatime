@@ -113,7 +113,7 @@ class Job < ActiveRecord::Base
 
     script_path = "#{work_path}/job_command_#{self.id}.sh"
 
-    File.open(script_path ,File::RDWR|File::CREAT, 0755) do |f|
+    File.open(script_path, "w", 0755) do |f|
       f.write command
     end
 
