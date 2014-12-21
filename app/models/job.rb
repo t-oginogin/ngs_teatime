@@ -132,7 +132,8 @@ class Job < ActiveRecord::Base
   end
 
   def result_files
-    Dir.glob("#{Rails.root}/#{work_path}/*").map {|f| File.basename f}
+    files = Dir.glob("#{Rails.root}/#{work_path}/*")
+    files.select{|f| !(f =~ /job_command_[\d]+.sh/)}.map{|f| File.basename f}
   end
 
   def result_file(file_name)

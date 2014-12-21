@@ -421,15 +421,17 @@ RSpec.describe Job, :type => :model do
       FileUtils.mkdir_p(work_dir)
       FileUtils.touch("#{work_dir}/test1.log")
       FileUtils.touch("#{work_dir}/test2.log")
+      FileUtils.touch("#{work_dir}/job_command_#{@job.id}.sh")
     end
 
     after do
       @job.destroy
     end
 
-    it 'returns result files' do
+    it 'returns result files exept sh file' do
       files = @job.result_files
 
+      expect(files.count).to eq 2
       expect(files.first).to eq "test1.log"
       expect(files.last).to eq "test2.log"
     end
