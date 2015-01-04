@@ -9,7 +9,7 @@ class CreateJobs < ActiveRecord::Migration
       t.string :comment
       t.string :status
 
-      t.timestamps
+      t.timestamps null: false
     end
   end
 end

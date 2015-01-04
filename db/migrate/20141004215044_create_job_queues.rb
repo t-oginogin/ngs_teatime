@@ -3,7 +3,7 @@ class CreateJobQueues < ActiveRecord::Migration
     create_table :job_queues do |t|
       t.integer :job_id, unique: :true, null: :false
 
-      t.timestamps
+      t.timestamps null: false
     end
   end
 end

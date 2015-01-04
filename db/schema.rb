@@ -13,21 +13,21 @@
 
 ActiveRecord::Schema.define(version: 20141123010629) do
 
-  create_table "job_queues", force: true do |t|
+  create_table "job_queues", force: :cascade do |t|
     t.integer  "job_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
     t.integer  "command_pid"
   end
 
-  create_table "jobs", force: true do |t|
+  create_table "jobs", force: :cascade do |t|
     t.string   "tool"
     t.string   "target_file_1"
     t.string   "target_file_2"
     t.string   "comment"
     t.string   "status",           default: "created"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
     t.string   "reference_genome"
   end
 
