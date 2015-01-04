@@ -212,7 +212,7 @@ class Job < ActiveRecord::Base
     command_string = <<-"EOS"
     fastq_quality_filter -Q33 -q 20 -p 80 -i #{self.target_file_1.path} | fastq_quality_trimmer -Q33 -t 20 -l 10 -o #{trimmed_result_1};
     fastq_quality_filter -Q33 -q 20 -p 80 -i #{self.target_file_2.path} | fastq_quality_trimmer -Q33 -t 20 -l 10 -o #{trimmed_result_2};
-    bowtie2 -p 2 --un-conc #{un_conc_result} --al-conc #{al_conc_result} -x #{index_file} -1 #{trimmed_result_1} -2 #{trimmed_result_2} > #{tool_log} 2>&1;
+    bowtie2 -p 2 --un-conc #{un_conc_result} --al-conc #{al_conc_result} -x #{index_file} -1 #{trimmed_result_1} -2 #{trimmed_result_2} 1>/dev/null 2>#{tool_log};
     EOS
 
     command_string
