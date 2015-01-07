@@ -1,17 +1,17 @@
 module JobsHelper
   def schedulable( job )
-    job.status == 'created' || job.status == 'canceled'
+    job.schedulable?
   end
 
   def cancelable( job )
-    job.status == 'scheduled' || job.status == 'doing'
+    job.cancelable?
   end
 
   def editable( job )
-    job.status == 'created' || job.status == 'canceled' || job.status == 'error'
+    job.editable?
   end
 
   def deletable( job )
-    !(job.status == 'scheduled' || job.status == 'doing' || job.status == 'canceling')
+    job.deletable?
   end
 end

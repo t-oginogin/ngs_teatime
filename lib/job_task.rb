@@ -22,6 +22,11 @@ class JobTask
     def check_cancel
       jobs = Job.where("jobs.status = 'canceling'")
       (jobs || []).each do |job|
+        unless job.job_queue
+          job.status = 'canceled'
+          job.save!
+          next
+        end
         job.be_canceled and next if job.job_queue.command_pid.blank?
 
         command = "ps -p #{job.job_queue.command_pid} -o \"pgid\""
@@ -29,7 +34,7 @@ class JobTask
         if pgid =~ /[0-9]/
           system_command "kill -TERM -#{pgid}"
         else
-          Rails.logger.error 'Process was not found' and next
+          Rails.logger.error 'Process was not found'
         end
         job.be_canceled
       end

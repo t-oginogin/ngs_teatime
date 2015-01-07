@@ -18,7 +18,25 @@ class Job < ActiveRecord::Base
             'error' => I18n.t('messages.status.error'),
             'done' => I18n.t('messages.status.done')}
 
+  def schedulable?
+    self.status == 'created' || self.status == 'canceled'
+  end
+
+  def cancelable?
+    self.status == 'scheduled' || self.status == 'doing'
+  end
+
+  def editable?
+    self.status == 'created' || self.status == 'canceled' || self.status == 'error'
+  end
+
+  def deletable?
+    !(self.status == 'scheduled' || self.status == 'doing' || self.status == 'canceling')
+  end
+
   def schedule
+    return false unless schedulable?
+
     Job.transaction do
       self.create_job_queue
       self.status = 'scheduled'
@@ -44,6 +62,8 @@ class Job < ActiveRecord::Base
   end
 
   def cancel
+    return false unless cancelable?
+
     Job.transaction do
       self.status = 'canceling'
       self.save!
@@ -57,7 +77,7 @@ class Job < ActiveRecord::Base
 
   def be_canceled
     Job.transaction do
-      self.job_queue.destroy!
+      self.job_queue.try(:destroy!)
       self.job_queue = nil
       self.status = 'canceled'
       self.save!
@@ -71,7 +91,7 @@ class Job < ActiveRecord::Base
 
   def be_done
     Job.transaction do
-      self.job_queue.destroy!
+      self.job_queue.try(:destroy!)
       self.job_queue = nil
       self.status = 'done'
       self.save!
@@ -85,7 +105,7 @@ class Job < ActiveRecord::Base
 
   def error_occurred
     Job.transaction do
-      self.job_queue.destroy!
+      self.job_queue.try(:destroy!)
       self.job_queue = nil
       self.status = 'error'
       self.save!
@@ -122,7 +142,9 @@ class Job < ActiveRecord::Base
   end
 
   def done?
-    pid = self.job_queue.command_pid
+    pid = self.job_queue.try(:command_pid)
+    return true unless pid
+
     begin
       return false if `ps #{pid}` =~ /#{pid}/
     rescue => e
