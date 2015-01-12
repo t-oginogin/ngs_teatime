@@ -165,8 +165,28 @@ class Job < ActiveRecord::Base
   private
 
   def vicuna_command
-    logger.error "vicuna command is not supported now"
-    nil
+    create_work_dir
+    config_base_file = "#{Rails.root}/config/vicuna_config.txt"
+    config_file = "#{work_path}/job_#{self.id}_#{tool}_config.txt"
+    tool_log = "#{work_path}/job_#{self.id}_#{tool}.log"
+
+    File.open(config_file, "w", 0644) do |f_out|
+      File.open(config_base_file, "r") do |f_in|
+        f_in.each_line do |line|
+          replaced_line = line.gsub(/\#\{input_directory\}/, "#{Rails.root}/#{work_path}/")
+          replaced_line = replaced_line.gsub(/\#\{output_directory\}/, "#{Rails.root}/#{work_path}/")
+          f_out.write replaced_line
+        end
+      end
+    end
+
+    return nil unless FileTest.exist?(config_file)
+
+    command_string = <<-"EOS"
+    OMP_NUM_THREADS=2 vicuna-omp-v1.0 #{config_file} > #{tool_log} 2>&1;
+    EOS
+
+    command_string
   end
 
   def bwa_command

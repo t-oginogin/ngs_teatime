@@ -321,10 +321,28 @@ RSpec.describe Job, :type => :model do
     end
 
     context 'with vicuna' do
-      skip 'return vicuna command string' do
+      it 'return vicuna command string' do
         @job.tool = 'vicuna'
         @job.save!
         expect(@job.command).to match /vicuna/
+      end
+
+      it 'created work dir' do
+        @job.tool = 'vicuna'
+        @job.save!
+        @job.command
+
+        isExist = FileTest.exist?("tmp/job_work/#{Rails.env}/#{@job.id}")
+        expect(isExist).to be true
+      end
+
+      it 'created config file' do
+        @job.tool = 'vicuna'
+        @job.save!
+        @job.command
+
+        isExist = FileTest.exist?("tmp/job_work/#{Rails.env}/#{@job.id}/job_#{@job.id}_vicuna_config.txt")
+        expect(isExist).to be true
       end
     end
 
