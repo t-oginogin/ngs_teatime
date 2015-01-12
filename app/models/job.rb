@@ -181,6 +181,8 @@ class Job < ActiveRecord::Base
     end
 
     return nil unless FileTest.exist?(config_file)
+    FileUtils.ln_sf(self.target_file_1.path, "#{work_path}/#{self.target_file_1.file.filename}")
+    FileUtils.ln_sf(self.target_file_2.path, "#{work_path}/#{self.target_file_2.file.filename}")
 
     command_string = <<-"EOS"
     OMP_NUM_THREADS=2 vicuna-omp-v1.0 #{config_file} > #{tool_log} 2>&1;

@@ -312,6 +312,7 @@ RSpec.describe Job, :type => :model do
       @job = Job.new
       @job.tool = 'vicuna'
       @job.target_file_1 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
+      @job.target_file_2 = File.open(File.join(Rails.root, '/spec/fixtures/files/test.fastq'))
       @job.save!
       FileUtils.rm_rf("tmp/job_work/#{Rails.env}/#{@job.id}")
     end
