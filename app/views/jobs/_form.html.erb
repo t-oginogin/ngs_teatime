@@ -96,7 +96,7 @@
 
   <div class="row form-group">
     <div class="col-md-2">
-      <%= f.submit class: "btn btn-primary" %>
+      <%= f.submit class: "btn btn-primary", data: {disable_with: t('messages.creating_or_updating')} %>
     </div>
   </div>
 <% end %>

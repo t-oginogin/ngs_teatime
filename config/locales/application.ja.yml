@@ -44,3 +44,4 @@ ja:
       canceled: 'キャンセル済'
       error: 'エラー発生'
       done: '完了'
+    creating_or_updating: '処理中...'
