@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141123010629) do
+ActiveRecord::Schema.define(version: 20150117064413) do
 
   create_table "job_queues", force: :cascade do |t|
     t.integer  "job_id"
@@ -29,6 +29,8 @@ ActiveRecord::Schema.define(version: 20141123010629) do
     t.datetime "created_at",                           null: false
     t.datetime "updated_at",                           null: false
     t.string   "reference_genome"
+    t.datetime "started_at"
+    t.datetime "finished_at"
   end
 
 end

@@ -40,6 +40,8 @@ class Job < ActiveRecord::Base
     Job.transaction do
       self.create_job_queue
       self.status = 'scheduled'
+      self.started_at = nil
+      self.finished_at = nil
       self.save!
     end
       true
@@ -52,6 +54,8 @@ class Job < ActiveRecord::Base
   def be_doing
     Job.transaction do
       self.status = 'doing'
+      self.started_at = Time.current
+      self.finished_at = nil
       self.save!
     end
       true
@@ -80,6 +84,7 @@ class Job < ActiveRecord::Base
       self.job_queue.try(:destroy!)
       self.job_queue = nil
       self.status = 'canceled'
+      self.finished_at = Time.current
       self.save!
     end
       true
@@ -94,6 +99,7 @@ class Job < ActiveRecord::Base
       self.job_queue.try(:destroy!)
       self.job_queue = nil
       self.status = 'done'
+      self.finished_at = Time.current
       self.save!
     end
       true
@@ -108,6 +114,7 @@ class Job < ActiveRecord::Base
       self.job_queue.try(:destroy!)
       self.job_queue = nil
       self.status = 'error'
+      self.finished_at = Time.current
       self.save!
     end
       true

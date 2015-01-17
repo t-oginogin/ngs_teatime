@@ -95,6 +95,28 @@
 <br/>
 
 <div class="row">
+  <div class="col-md-2">
+    <%= t('activerecord.attributes.job.started_at') %>
+  </div>
+  <div class="col-md-2">
+    <%= @job.started_at.strftime('%Y/%m/%d %H:%M') if @job.started_at %>
+  </div>
+</div>
+
+<br/>
+
+<div class="row">
+  <div class="col-md-2">
+    <%= t('activerecord.attributes.job.finished_at') %>
+  </div>
+  <div class="col-md-2">
+    <%= @job.finished_at.strftime('%Y/%m/%d %H:%M') if @job.finished_at %>
+  </div>
+</div>
+
+<br/>
+
+<div class="row">
   <div class="col-md-1">
     <%= link_to t('messages.edit'), edit_job_path(@job), class: "btn btn-default" %>
   </div>
