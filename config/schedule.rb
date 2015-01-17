@@ -19,6 +19,9 @@
 
 # Learn more: http://github.com/javan/whenever
 
-every 5.seconds do
-  runner "JobTask.execute"
+set :output, '/var/www/ngs_teatime/log/crontab.log'
+set :environment, :production
+
+every 5.minutes do
+  runner 'JobTask.execute'
 end
