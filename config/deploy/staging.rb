@@ -1,12 +1,14 @@
+set :ssh_options, :port => "2222"
+
 # Simple Role Syntax
 # ==================
 # Supports bulk-adding hosts to roles, the primary server in each group
 # is considered to be the first unless any hosts have the primary
 # property set.  Don't declare `role :all`, it's a meta role.
 
-role :app, %w{vagrant@localhost}
-role :web, %w{vagrant@localhost}
-role :db,  %w{vagrant@localhost}
+role :app, %w{vagrant@127.0.0.1}
+role :web, %w{vagrant@127.0.0.1}
+role :db,  %w{vagrant@127.0.0.1}
 
 
 # Extended Server Syntax
@@ -15,7 +17,7 @@ role :db,  %w{vagrant@localhost}
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-server 'localhost', user: 'vagrant', roles: %w{web app db}
+#server '127.0.0.1', user: 'vagrant', roles: %w{web app db}
 
 
 # Custom SSH Options
@@ -44,12 +46,12 @@ server 'localhost', user: 'vagrant', roles: %w{web app db}
 #     # password: 'please use keys'
 #   }
 
-server 'localhost',
+server '127.0.0.1',
   user: 'vagrant',
   roles: %w{web app db},
   ssh_options: {
     user: 'vagrant',
-    keys: %w(~/.vagrant.d/insecure_private_key),
     forward_agent: false,
-    auth_methods: %w(publckey)
+    port: 2222,
+    auth_methods: %w(password)
   }
