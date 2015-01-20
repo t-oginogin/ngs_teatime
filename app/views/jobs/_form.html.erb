@@ -29,7 +29,7 @@
       <%= f.label :tool %>*<br>
     </div>
     <div class="col-md-2">
-      <%= f.select :tool, tool_labels, {}, class: 'form-control' %>
+      <%= f.select :tool, tool_labels, {}, class: 'form-control', onchange: "update_reference_genome()" %>
     </div>
   </div>
 
@@ -65,12 +65,12 @@
     <% end %>
   </div>
 
-  <div class="row form-group">
+  <div id='reference_genome' class="row form-group">
     <div class="col-md-2">
       <%= f.label :reference_genome %>*<br>
     </div>
     <div class="col-md-2">
-      <%= f.select :reference_genome, reference_genome_labels, {}, class: 'form-control' %>
+      <%= f.select :reference_genome, reference_genome_labels, {include_blank: true}, {class: 'form-control'} %>
     </div>
   </div>
 
