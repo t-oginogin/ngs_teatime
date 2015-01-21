@@ -9,4 +9,5 @@ window.update_reference_genome = ->
   if /bowtie/.test($('#job_tool option:selected').text())
     $('#reference_genome').show()
   else
+    $('#job_reference_genome').val('')
     $('#reference_genome').hide()
