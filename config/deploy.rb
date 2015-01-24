@@ -27,7 +27,7 @@ set :pty, true
 #set :linked_files, fetch(:linked_files, []).push('config/database.yml')
 
 # Default value for linked_dirs is []
-set :linked_dirs, fetch(:linked_dirs, []).push('bin', 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/assets', 'tmp/job_work')
+set :linked_dirs, fetch(:linked_dirs, []).push('bin', 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/assets')
 
 # Default value for default_env is {}
 set :default_env, { path: "/home/vagrant/.rbenv/shims:/home/vagrant/.rbenv/bin:$PATH" }
@@ -38,12 +38,19 @@ set :default_env, { path: "/home/vagrant/.rbenv/shims:/home/vagrant/.rbenv/bin:$
 set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
 
 namespace :deploy do
-  task :directories do
-    on roles(:web) do
-      execute :sudo, :mkdir, '-pv', '/ngs/app/'
-      execute :sudo, :chown, '-R', "#{fetch(:user)}:#{fetch(:group)}", '/ngs/app/'
-      execute :sudo, :mkdir, '-pv', '/ngs/app/job_work/'
-      execute :sudo, :chown, '-R', "#{fetch(:user)}:#{fetch(:group)}", '/ngs/app/job_work/'
+  Rake::Task["deploy:check:directories"].clear
+  namespace :check do
+    task :directories do
+      on roles(:web) do
+        execute :sudo, :mkdir, '-pv', shared_path, releases_path
+        execute :sudo, :chown, '-R', "#{fetch(:user)}:#{fetch(:group)}", deploy_to
+        execute :sudo, :mkdir, '-pv', '/ngs/app/'
+        execute :sudo, :chown, '-R', "#{fetch(:user)}:#{fetch(:group)}", '/ngs/app/'
+        execute :sudo, :mkdir, '-pv', '/ngs/app/db/'
+        execute :sudo, :chown, '-R', "#{fetch(:user)}:#{fetch(:group)}", '/ngs/app/db/'
+        execute :sudo, :mkdir, '-pv', '/ngs/app/job_work/'
+        execute :sudo, :chown, '-R', "#{fetch(:user)}:#{fetch(:group)}", '/ngs/app/job_work/'
+      end
     end
   end
 

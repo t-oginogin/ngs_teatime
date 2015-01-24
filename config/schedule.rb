@@ -19,8 +19,8 @@
 
 # Learn more: http://github.com/javan/whenever
 
-set :output, '/var/www/ngs_teatime/log/crontab.log'
-set :environment, :production
+set :output, "#{Rails.root}/log/crontab.log"
+#set :environment, :production
 
 every 5.minutes do
   runner 'JobTask.execute'
