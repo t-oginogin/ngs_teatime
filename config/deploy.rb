@@ -1,6 +1,9 @@
 # config valid only for current version of Capistrano
 lock '3.3.5'
 
+set :user, 'vagrant'
+set :group, 'vagrant'
+
 set :application, 'ngs_teatime'
 set :repo_url, 'https://github.com/t-oginogin/ngs_teatime.git'
 
