@@ -19,7 +19,7 @@
 
 # Learn more: http://github.com/javan/whenever
 
-set :output, "#{Rails.root}/log/crontab.log"
+set :output, "#{Whenever.path}/log/crontab.log"
 #set :environment, :production
 
 every 5.minutes do
