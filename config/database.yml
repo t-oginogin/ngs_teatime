@@ -22,8 +22,8 @@ test:
 
 staging:
   <<: *default
-  database: db/staging.sqlite3
+  database: /ngs/app/db/staging.sqlite3
 
 production:
   <<: *default
-  database: db/production.sqlite3
+  database: /ngs/app/db/production.sqlite3

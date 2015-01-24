@@ -278,7 +278,7 @@ class Job < ActiveRecord::Base
   end
 
   def work_path
-    "tmp/job_work/#{Rails.env}/#{self.id}"
+    "#{Settings.job.work_path}/#{self.id}"
   end
 
   def cmp_path
@@ -294,6 +294,6 @@ class Job < ActiveRecord::Base
   end
 
   def indexes_path
-    "/ngs/data/indexes/"
+    "#{Settings.job.indexes_path}/"
   end
 end

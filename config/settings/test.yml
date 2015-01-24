@@ -1,0 +1,4 @@
+job:
+  uploads_path: "uploads"
+  work_path: "tmp/job_work/test"
+  indexes_pash: "tmp/indexes"

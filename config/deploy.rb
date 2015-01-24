@@ -38,6 +38,14 @@ set :default_env, { path: "/home/vagrant/.rbenv/shims:/home/vagrant/.rbenv/bin:$
 set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
 
 namespace :deploy do
+  task :directories do
+    on roles(:web) do
+      execute :sudo, :mkdir, '-pv', '/ngs/app/'
+      execute :sudo, :chown, '-R', "#{fetch(:user)}:#{fetch(:group)}", '/ngs/app/'
+      execute :sudo, :mkdir, '-pv', '/ngs/app/job_work/'
+      execute :sudo, :chown, '-R', "#{fetch(:user)}:#{fetch(:group)}", '/ngs/app/job_work/'
+    end
+  end
 
   desc 'Restart application'
   task :restart do

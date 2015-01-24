@@ -42,6 +42,7 @@ gem 'bootstrap-sass', '~> 3.2.0'
 gem 'carrierwave', '~> 0.10.0'
 gem 'jquery-turbolinks'
 gem 'whenever', :require => false
+gem "rails_config"
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.1.0'

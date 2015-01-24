@@ -1,0 +1,4 @@
+job:
+  uploads_path: "/ngs/app/uploads"
+  work_path: "/ngs/app/job_work/production"
+  indexes_pash: "/ngs/data/indexes"
