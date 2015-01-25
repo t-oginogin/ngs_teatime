@@ -1,0 +1,21 @@
+doctype html
+html
+  head
+    title
+      | NgsTeatime
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+  body
+    header.navbar.navbar-default[role="navigation"]
+      .container
+        .navbar-header
+          = link_to 'NgsTeatime', root_path, class: 'navbar-brand'
+    .container
+      - if notice
+        .alert.alert-success[role="alert"]
+          = notice
+      - if alert
+        .alert.alert-danger[role="alert"]
+          = alert
+      = yield

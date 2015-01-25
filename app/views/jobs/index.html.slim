@@ -1,0 +1,60 @@
+h1
+  | Listing jobs
+br
+table.table.table-striped
+  thead
+    tr
+      th
+        = t('activerecord.attributes.job.id')
+      th
+        = t('activerecord.attributes.job.tool')
+      th
+        = t('activerecord.attributes.job.target_file_1')
+      th
+        = t('activerecord.attributes.job.target_file_2')
+      th
+        = t('activerecord.attributes.job.reference_genome')
+      th
+        = t('activerecord.attributes.job.comment')
+      th
+        = t('activerecord.attributes.job.status')
+      th
+        = t('activerecord.attributes.job.started_at')
+      th
+        = t('activerecord.attributes.job.finished_at')
+      th[colspan="4"]
+        = t('messages.action')
+  tbody
+    - @jobs.each do |job|
+      tr
+        td
+          = job.id
+        td
+          = job.tool
+        td
+          = job.target_file_1.file.try(:filename) if job.target_file_1
+        td
+          = job.target_file_2.file.try(:filename) if job.target_file_2
+        td
+          = job.reference_genome
+        td
+          = job.comment
+        td
+          = Job::STATUS[job.status]
+        td
+          = job.started_at.strftime('%Y/%m/%d %H:%M') if job.started_at
+        td
+          = job.finished_at.strftime('%Y/%m/%d %H:%M') if job.finished_at
+        td
+          = link_to t('messages.schedule'), schedule_job_path(job) if schedulable job
+          = link_to t('messages.cancel'), cancel_job_path(job) if cancelable job
+        td
+          = link_to t('messages.show'), job
+        td
+          = link_to t('messages.edit'), edit_job_path(job) if editable job
+        td
+          = link_to t('messages.delete'), job, method: :delete, data: { confirm: 'Are you sure?' } if deletable job
+br
+.row
+  .col-md-1
+    = link_to t('messages.new_job'), new_job_path, class: "btn btn-primary"

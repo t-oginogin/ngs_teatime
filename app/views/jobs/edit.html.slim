@@ -1,0 +1,8 @@
+h1
+  | Editing Job
+= render 'form'
+.row
+  .col-md-1
+    = link_to t('messages.show'), @job, class: "btn btn-default"
+  .col-md-1
+    = link_to t('messages.back'), jobs_path, class: "btn btn-default"

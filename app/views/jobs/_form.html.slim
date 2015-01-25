@@ -1,0 +1,71 @@
+= form_for(@job) do |f|
+  - if @job.errors.any?
+    #error_explanation
+      .alert.alert-danger
+        h2
+          = pluralize(@job.errors.count, "error")
+        ul
+          - @job.errors.full_messages.each do |message|
+            li
+              = message
+  - unless controller.action_name == 'new'
+  .row.form-group
+    .col-md-2
+      = f.label :id
+      br
+    .col-md-2
+      = @job.id
+  .row.form-group
+    .col-md-2
+      = f.label :tool
+      | *
+      br
+    .col-md-2
+      = f.select :tool, tool_labels, {}, class: 'form-control', onchange: "update_reference_genome()"
+  .row.form-group
+    .col-md-2
+      = f.label :target_file_1
+      | *
+      br
+    .col-md-4
+      = f.file_field :target_file_1, class: 'filestyle form-control'
+      = f.hidden_field :target_file_1_cache
+    - if @job.target_file_1?
+      .checkbox.col-md-2
+        = f.check_box :remove_target_file_1
+        = t('messages.delete_file')
+  .row.form-group
+    .col-md-2
+      = f.label :target_file_2
+      br
+    .col-md-4
+      = f.file_field :target_file_2, class: 'filestyle form-control'
+      = f.hidden_field :target_file_2_cache
+    - if @job.target_file_2?
+      .checkbox.col-md-2
+        = f.check_box :remove_target_file_2
+        = t('messages.delete_file')
+  #reference_genome.row.form-group
+    .col-md-2
+      = f.label :reference_genome
+      | *
+      br
+    .col-md-2
+      = f.select :reference_genome, reference_genome_labels, {include_blank: true}, {class: 'form-control'}
+  .row.form-group
+    .col-md-2
+      = f.label :comment
+      br
+    .col-md-4
+      = f.text_field :comment, class: 'form-control'
+  - unless controller.action_name == 'new'
+  .row.form-group
+    .col-md-2
+      = f.label :status
+      br
+    .col-md-2
+      =  Job::STATUS[@job.status]
+  .row.form-group
+    .col-md-2
+      = f.submit class: "btn btn-primary", data: {disable_with: t('messages.creating_or_updating')}
+br
