@@ -2,3 +2,4 @@ job:
   uploads_path: "uploads"
   work_path: "tmp/job_work/development"
   indexes_pash: "tmp/indexes"
+cpu_core_count: 2

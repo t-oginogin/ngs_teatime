@@ -2,3 +2,4 @@ job:
   uploads_path: "/ngs/app/uploads"
   work_path: "/ngs/app/job_work/staging"
   indexes_pash: "/ngs/data/indexes"
+cpu_core_count: <%= ENV['NGS_CPU_CORE_COUNT'] || 4 %>

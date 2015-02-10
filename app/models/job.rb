@@ -192,7 +192,7 @@ class Job < ActiveRecord::Base
     FileUtils.ln_sf(self.target_file_2.path, "#{work_path}/#{self.target_file_2.file.filename}")
 
     command_string = <<-"EOS"
-    OMP_NUM_THREADS=2 vicuna-omp-v1.0 #{config_file} > #{tool_log} 2>&1;
+    OMP_NUM_THREADS=#{Settings.cpu_core_count} vicuna-omp-v1.0 #{config_file} > #{tool_log} 2>&1;
     EOS
 
     command_string
@@ -267,7 +267,7 @@ class Job < ActiveRecord::Base
     al_conc_trimmed_result_2 = "#{work_path}/job_#{self.id}_al_trim_2.fastq"
 
     command_string = <<-"EOS"
-    bowtie2 -p 2 --un-conc #{un_conc_result} --al-conc #{al_conc_result} -x #{index_file} -1 #{self.target_file_1.path} -2 #{self.target_file_2.path} 1>/dev/null 2>#{tool_log};
+    bowtie2 -p #{Settings.cpu_core_count} --un-conc #{un_conc_result} --al-conc #{al_conc_result} -x #{index_file} -1 #{self.target_file_1.path} -2 #{self.target_file_2.path} 1>/dev/null 2>#{tool_log};
     fastq_quality_filter -Q33 -q 20 -p 80 -i #{un_conc_result_1} | fastq_quality_trimmer -Q33 -t 20 -l 10 -o #{un_conc_trimmed_result_1};
     fastq_quality_filter -Q33 -q 20 -p 80 -i #{un_conc_result_2} | fastq_quality_trimmer -Q33 -t 20 -l 10 -o #{un_conc_trimmed_result_2};
     fastq_quality_filter -Q33 -q 20 -p 80 -i #{al_conc_result_1} | fastq_quality_trimmer -Q33 -t 20 -l 10 -o #{al_conc_trimmed_result_1};
