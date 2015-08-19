@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.0'
+gem 'rails', '4.2.3'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 # Use SCSS for stylesheets
@@ -42,7 +42,7 @@ gem 'bootstrap-sass', '~> 3.2.0'
 gem 'carrierwave', '~> 0.10.0'
 gem 'jquery-turbolinks'
 gem 'whenever', :require => false
-gem "rails_config"
+gem "config"
 gem 'slim-rails'
 
 group :development, :test do
